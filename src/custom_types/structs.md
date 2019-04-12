@@ -1,32 +1,25 @@
-# Structures
+# 结构体
 
-There are three types of structures ("structs") that can be created using the
-`struct` keyword:
+结构体（structure，缩写成 struct）有 3 种类型，使用 `struct` 关键字来创建：
 
-* Tuple structs, which are, basically, named tuples.
-* The classic [C structs][c_struct]
-* Unit structs, which are field-less, are useful for generics.
+* 元组结构体，总的来说是根据元组来命名。
+* C 语言风格的结构体 [c_struct]。
+* 单元结构体，不带字段，在泛型中很有用。
 
 ```rust,editable
-#[derive(Debug)]
-struct Person<'a> {
-    name: &'a str,
-    age: u8,
-}
-
-// A unit struct
+// 单元结构体
 struct Nil;
 
-// A tuple struct
+// 元组结构体
 struct Pair(i32, f32);
 
-// A struct with two fields
+// 带有两个字段的结构体
 struct Point {
     x: f32,
     y: f32,
 }
 
-// Structs can be reused as fields of another struct
+// 结构体可以作为另一个结构体的字段
 #[allow(dead_code)]
 struct Rectangle {
     p1: Point,
@@ -34,61 +27,46 @@ struct Rectangle {
 }
 
 fn main() {
-    // Create struct with field init shorthand
-    let name = "Peter";
-    let age = 27;
-    let peter = Person { name, age };
-
-    // Print debug struct
-    println!("{:?}", peter);
-
-
-    // Instantiate a `Point`
+    // 实例化结构体 `Point`
     let point: Point = Point { x: 0.3, y: 0.4 };
 
-    // Access the fields of the point
+    // 访问 point 的字段
     println!("point coordinates: ({}, {})", point.x, point.y);
 
-    // Make a new point by using struct update syntax to use the fields of our other one
-    let new_point = Point { x: 0.1, ..point };
-    // `new_point.y` will be the same as `point.y` because we used that field from `point`
-    println!("second point: ({}, {})", new_point.x, new_point.y);
-
-    // Destructure the point using a `let` binding
+    // 使用 `let` 绑定来解构 point
     let Point { x: my_x, y: my_y } = point;
 
     let _rectangle = Rectangle {
-        // struct instantiation is an expression too
+        // 结构体的实例化也是一个表达式
         p1: Point { x: my_y, y: my_x },
         p2: point,
     };
 
-    // Instantiate a unit struct
+    // 实例化一个单元结构体
     let _nil = Nil;
 
-    // Instantiate a tuple struct
+    // 实例化一个元组结构体
     let pair = Pair(1, 0.1);
 
-    // Access the fields of a tuple struct
+    // 访问元组结构体的字段
     println!("pair contains {:?} and {:?}", pair.0, pair.1);
 
-    // Destructure a tuple struct
+    // 解构一个元组结构体
     let Pair(integer, decimal) = pair;
 
     println!("pair contains {:?} and {:?}", integer, decimal);
 }
 ```
 
-### Activity
+### 动手试一试：
 
-1. Add a function `rect_area` which calculates the area of a rectangle (try 
-   using nested destructuring). 
-2. Add a function `square` which takes a `Point` and a `f32` as arguments, and returns a `Rectangle` with its lower left corner on the point, and a width and height corresponding to the `f32`.
+1. 增加一个计算长方形面积的函数 `rect_area`（尝试使用嵌套的解构方式）。
+2. 增加一个函数 `square`，接受的参数是一个 `Point` 和一个 `f32`，并返回一个 `Rectangle`（长方形）的信息，包括左下角的点，以及长和宽的浮点数值。
 
-### See also:
+### 参见：
 
-[`attributes`][attributes] and [destructuring][destructuring]
+[`attributes`][attributes] 和 [解构][destructuring]
 
-[attributes]: attribute.html
-[c_struct]: https://en.wikipedia.org/wiki/Struct_(C_programming_language)
-[destructuring]: flow_control/match/destructuring.html
+[attributes]: ./attribute.html
+[c_struct]: http://en.wikipedia.org/wiki/Struct_(C_programming_language)
+[destructuring]: ./flow_control/match/destructuring.html

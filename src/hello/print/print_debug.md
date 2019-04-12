@@ -1,84 +1,55 @@
-# Debug
+# 调试
 
-All types which want to use `std::fmt` formatting `traits` require an
-implementation to be printable. Automatic implementations are only provided
-for types such as in the `std` library. All others *must* be manually
-implemented somehow.
+所有要用到`std::fmt`格式化的`traits`类型都需要转化成可打印的实现。`std`库这些类型能够自动实现。但所有其他类型都必须手动来实现。
 
-The `fmt::Debug` `trait` makes this very straightforward. *All* types can
-`derive` (automatically create) the `fmt::Debug` implementation. This is
-not true for `fmt::Display` which must be manually implemented.
+`fmt::Debug` `trait` 使上面工作变得相当简单。所有类型都能推导（自动创建）`fmt::Debug`
+的实现。但是 `fmt::Display` 需要手动来实现。
 
 ```rust
-// This structure cannot be printed either with `fmt::Display` or
-// with `fmt::Debug`
+// 这种结构体不能使用`fmt::Display`或`fmt::Debug`来进行打印。
 struct UnPrintable(i32);
 
-// The `derive` attribute automatically creates the implementation
-// required to make this `struct` printable with `fmt::Debug`.
+// `derive`属性会自动创建实现，借助`fmt::Debug`使得这个`struct`能够打印。
 #[derive(Debug)]
 struct DebugPrintable(i32);
 ```
 
-All `std` library types automatically are printable with `{:?}` too:
+所有`std`库类型加上`{:?}`后也能够自动打印：
 
 ```rust,editable
-// Derive the `fmt::Debug` implementation for `Structure`. `Structure`
-// is a structure which contains a single `i32`.
+// 从 `fmt::Debug` 获得实现给 `Structure`。
+// `Structure` 是一个包含`i32`基本类型的结构体。
 #[derive(Debug)]
 struct Structure(i32);
 
-// Put a `Structure` inside of the structure `Deep`. Make it printable
-// also.
+// 将 `Structure` 放到结构体 `Deep` 中。使 `Deep` 也能够打印。
 #[derive(Debug)]
 struct Deep(Structure);
 
 fn main() {
-    // Printing with `{:?}` is similar to with `{}`.
+    // 打印操作使用 `{:?}` 和使用 `{}` 类似。
     println!("{:?} months in a year.", 12);
     println!("{1:?} {0:?} is the {actor:?} name.",
              "Slater",
              "Christian",
              actor="actor's");
 
-    // `Structure` is printable!
+    // `Structure` 是能够打印的类型。
     println!("Now {:?} will print!", Structure(3));
     
-    // The problem with `derive` is there is no control over how
-    // the results look. What if I want this to just show a `7`?
+    // 使用 `derive` 的一个问题是不能控制输出的形式。
+    // 假如我只想展示一个 `7`？
     println!("Now {:?} will print!", Deep(Structure(7)));
 }
 ```
 
-So `fmt::Debug` definitely makes this printable but sacrifices some
-elegance. Rust also provides "pretty printing" with `{:#?}`.
+所以 `fmt::Debug` 确实使这些内容可以打印，但是牺牲了美感。手动执行 `fmt::Display` 将能够弥补这些问题。
 
-```rust,editable
-#[derive(Debug)]
-struct Person<'a> {
-    name: &'a str,
-    age: u8
-}
+### 参见：
 
-fn main() {
-    let name = "Peter";
-    let age = 27;
-    let peter = Person { name, age };
+[attributes][attributes], [`derive`][derive], [`std::fmt`][fmt] 和 [`struct`][structs]
 
-    // Pretty print
-    println!("{:#?}", peter);
-}
-```
-
-One can manually implement `fmt::Display` to control the display.
-
-### See also
-
-[attributes][attributes], [`derive`][derive], [`std::fmt`][fmt],
-and [`struct`][structs]
-
-[attributes]: https://doc.rust-lang.org/reference/attributes.html
-[derive]: trait/derive.html
-[fmt]: https://doc.rust-lang.org/std/fmt/
-[structs]: custom_types/structs.html
-
+[attributes]: http://doc.rust-lang.org/reference.html#attributes
+[derive]: ./trait/derive.html
+[fmt]: http://doc.rust-lang.org/std/fmt/
+[structs]: ./custom_types/structs.html

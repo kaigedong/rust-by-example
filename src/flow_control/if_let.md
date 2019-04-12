@@ -1,103 +1,66 @@
 # if let
 
-For some use cases, when matching enums, `match` is awkward. For example:
+在一些例子中，`match` 使用起来并不优雅。比如：
 
 ```rust
-// Make `optional` of type `Option<i32>`
+// 将 `optional` 定为 `Option<i32>` 类型
 let optional = Some(7);
 
 match optional {
     Some(i) => {
         println!("This is a really long string and `{:?}`", i);
-        // ^ Needed 2 indentations just so we could destructure
-        // `i` from the option.
+        // ^ 行首需要2个缩进，就这样可以从 option 类型中对 `i`
+        // 进行解构
     },
     _ => {},
-    // ^ Required because `match` is exhaustive. Doesn't it seem
-    // like wasted space?
+    // ^ 必需内容，因为 `match` 需要覆盖全部情况。难道不觉得冗余吗？
 };
 
 ```
 
-`if let` is cleaner for this use case and in addition allows various
-failure options to be specified:
+`if let` 对这样的用法要简洁得多，并且允许指明特定的各种不同的失败可选项
+内容（options）：
 
 ```rust,editable
 fn main() {
-    // All have type `Option<i32>`
+    // 全部都是 `Option<i32>` 类型
     let number = Some(7);
     let letter: Option<i32> = None;
     let emoticon: Option<i32> = None;
 
-    // The `if let` construct reads: "if `let` destructures `number` into
-    // `Some(i)`, evaluate the block (`{}`).
+    // `if let` 结构解读：若 `let` 将 `number` 解构成 `Some(i)`，则执行
+    // 语句块（`{}`）
     if let Some(i) = number {
         println!("Matched {:?}!", i);
     }
 
-    // If you need to specify a failure, use an else:
+    // 如果要指明失败情形，就使用 else：
     if let Some(i) = letter {
         println!("Matched {:?}!", i);
     } else {
-        // Destructure failed. Change to the failure case.
+        // 解构失败。换到失败情形（Change to the failure case）。
         println!("Didn't match a number. Let's go with a letter!");
     };
 
-    // Provide an altered failing condition.
+    // 提供一个改变的失败条件（Provide an altered failing condition）。
     let i_like_letters = false;
 
     if let Some(i) = emoticon {
         println!("Matched {:?}!", i);
-    // Destructure failed. Evaluate an `else if` condition to see if the
-    // alternate failure branch should be taken:
+    // 解构失败。执行 `else if` 条件来判断轮到的失败分支是否需要执行
     } else if i_like_letters {
         println!("Didn't match a number. Let's go with a letter!");
     } else {
-        // The condition evaluated false. This branch is the default:
+        // 条件执行错误。这是默认的分支：
         println!("I don't like letters. Let's go with an emoticon :)!");
     };
 }
 ```
 
-In the same way, `if let` can be used to match any enum value:
+### 参见：
 
-```rust,editable
-// Our example enum
-enum Foo {
-    Bar,
-    Baz,
-    Qux(u32)
-}
+[`枚举`][enum]，[`Option`][option]，和 [RFC][if_let_rfc]
 
-fn main() {
-    // Create example variables
-    let a = Foo::Bar;
-    let b = Foo::Baz;
-    let c = Foo::Qux(100);
-    
-    // Variable a matches Foo::Bar
-    if let Foo::Bar = a {
-        println!("a is foobar");
-    }
-    
-    // Variable b does not match Foo::Bar
-    // So this will print nothing
-    if let Foo::Bar = b {
-        println!("b is foobar");
-    }
-    
-    // Variable c matches Foo::Qux which has a value
-    // Similar to Some() in the previous example
-    if let Foo::Qux(value) = c {
-        println!("c is {}", value);
-    }
-}
-```
-
-### See also:
-
-[`enum`][enum], [`Option`][option], and the [RFC][if_let_rfc]
-
-[enum]: custom_types/enum.html
+[enum]: ./custom_types/enum.html
 [if_let_rfc]: https://github.com/rust-lang/rfcs/pull/160
-[option]: std/option.html
+[option]: ./std/option.html

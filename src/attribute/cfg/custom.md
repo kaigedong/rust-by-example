@@ -1,12 +1,11 @@
-# Custom
+# 自定义条件
 
-Some conditionals like `target_os` are implicitly provided by `rustc`, but
-custom conditionals must be passed to `rustc` using the `--cfg` flag.
+有部分条件如 `target_os` 在使用 `rustc` 时会隐式地提供，但是自定义条件必须使用 `--cfg` 标记来传给 `rustc`。
 
 ```rust,editable,ignore,mdbook-runnable
 #[cfg(some_condition)]
 fn conditional_function() {
-    println!("condition met!");
+    println!("condition met!")
 }
 
 fn main() {
@@ -14,9 +13,14 @@ fn main() {
 }
 ```
 
-Try to run this to see what happens without the custom `cfg` flag.
+不使用自定义的 `cfg` 标记：
 
-With the custom `cfg` flag:
+```bash
+$ rustc custom.rs && ./custom
+No such file or directory (os error 2)
+```
+
+使用自定义的 `cfg` 标记：
 
 ```bash
 $ rustc --cfg some_condition custom.rs && ./custom

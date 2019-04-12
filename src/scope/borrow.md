@@ -1,47 +1,43 @@
-# Borrowing
+# 借用
 
-Most of the time, we'd like to access data without taking ownership over
-it. To accomplish this, Rust uses a *borrowing* mechanism. Instead of
-passing objects by value (`T`), objects can be passed by reference (`&T`).
+多数情况下，我们更希望访问数据本身而不需要取得它的所有权。为实现这点，Rust 使用了**借用**（*borrowing*）机制。对象可以通过引用（`&T`）来传递，从而取代通过值（`T`）来传递。
 
-The compiler statically guarantees (via its borrow checker) that references 
-*always* point to valid objects. That is, while references to an object
-exist, the object cannot be destroyed.
+编译器静态地保证了（通过借用检查器）引用**总是**（*always*）指向有效的对象。也就是说，当存在引用指向一个对象时，该对象不能被销毁。
 
 ```rust,editable,ignore,mdbook-runnable
-// This function takes ownership of a box and destroys it
+// 此函数拥有 box 的所有权并销毁它
 fn eat_box_i32(boxed_i32: Box<i32>) {
     println!("Destroying box that contains {}", boxed_i32);
 }
 
-// This function borrows an i32
+// 此函数借用了一个 i32 类型
 fn borrow_i32(borrowed_i32: &i32) {
     println!("This int is: {}", borrowed_i32);
 }
 
 fn main() {
-    // Create a boxed i32, and a stacked i32
+    // 创建一个装箱的 i32 类型，以及一个存在栈中的 i32 类型。
     let boxed_i32 = Box::new(5_i32);
     let stacked_i32 = 6_i32;
 
-    // Borrow the contents of the box. Ownership is not taken,
-    // so the contents can be borrowed again.
+    // 借用了  box 的内容，但没有取得所有权，所以 box 的内容可以
+    // 再次借用。
     borrow_i32(&boxed_i32);
     borrow_i32(&stacked_i32);
 
     {
-        // Take a reference to the data contained inside the box
+        // 给出一个指向 box 里面所包含数据的引用
         let _ref_to_i32: &i32 = &boxed_i32;
 
-        // Error!
-        // Can't destroy `boxed_i32` while the inner value is borrowed.
+        // 报错！
+        // 当 `boxed_i32` 里面的值被借用时，不能销毁 `boxed_int`。
         eat_box_i32(boxed_i32);
-        // FIXME ^ Comment out this line
+        // 改正 ^ 注释掉此行
 
-        // `_ref_to_i32` goes out of scope and is no longer borrowed.
+        // `_ref_to_i32` 离开作用域且不再被借用。
     }
 
-    // `boxed_i32` can now give up ownership to `eat_box` and be destroyed
-    eat_box_i32(boxed_i32);
+    // box 现在可以放弃 `eat_i32` 的所有权且可以销毁
+    eat_i32(boxed_i32);
 }
 ```

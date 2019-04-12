@@ -1,16 +1,11 @@
-# Combinators: `and_then`
+# 组合算子：`and_then`
 
-`map()` was described as a chainable way to simplify `match` statements. 
-However, using `map()` on a function that returns an `Option<T>` results 
-in the nested `Option<Option<T>>`. Chaining multiple calls together can 
-then become confusing. That's where another combinator called `and_then()`, 
-known in some languages as flatmap, comes in.
+`map()` 以链式调用的方式来简化 `match` 语句。然而，在返回类型是 `Option<T>` 的函数中使用 `map()` 会导致出现嵌套形式 `Option<Option<T>>`。多层链式调用也会变得混乱。所以有必要引入 `and_them()`，就像某些熟知语言中的 flatmap。
 
-`and_then()` calls its function input with the wrapped value and returns the result. If the `Option` is `None`, then it returns `None` instead.
+`and_then()` 使用包裹的值（wrapped value）调用其函数输入并返回结果。 如果 `Option` 是 `None`，那么它返回 `None`。
 
-In the following example, `cookable_v2()` results in an `Option<Food>`. 
-Using `map()` instead of `and_then()` would have given an 
-`Option<Option<Food>>`, which is an invalid type for `eat()`.
+
+在下面例子中，`cookable_v2()` 会产生一个 `Option<Food>`。使用 `map()` 替代 `and_then()` 将会得到 `Option<Option<Food>>`，对 `eat()` 来说是一个无效类型。
 
 ```rust,editable
 #![allow(dead_code)]
@@ -18,7 +13,7 @@ Using `map()` instead of `and_then()` would have given an
 #[derive(Debug)] enum Food { CordonBleu, Steak, Sushi }
 #[derive(Debug)] enum Day { Monday, Tuesday, Wednesday }
 
-// We don't have the ingredients to make Sushi.
+// 我们没有原材料（ingredient）来制作寿司。
 fn have_ingredients(food: Food) -> Option<Food> {
     match food {
         Food::Sushi => None,
@@ -26,7 +21,7 @@ fn have_ingredients(food: Food) -> Option<Food> {
     }
 }
 
-// We have the recipe for everything except Cordon Bleu.
+// 我们拥有全部食物的食谱，除了欠缺高超的烹饪手艺。
 fn have_recipe(food: Food) -> Option<Food> {
     match food {
         Food::CordonBleu => None,
@@ -34,21 +29,22 @@ fn have_recipe(food: Food) -> Option<Food> {
     }
 }
 
-// To make a dish, we need both the recipe and the ingredients.
-// We can represent the logic with a chain of `match`es:
+// 做一份好菜，我们需要原材料和食谱这两者。
+// 我们可以借助一系列 `match` 来表达相应的逻辑：
+// （原文：We can represent the logic with a chain of `match`es:）
 fn cookable_v1(food: Food) -> Option<Food> {
-    match have_recipe(food) {
+    match have_ingredients(food) {
         None       => None,
-        Some(food) => match have_ingredients(food) {
+        Some(food) => match have_recipe(food) {
             None       => None,
             Some(food) => Some(food),
         },
     }
 }
 
-// This can conveniently be rewritten more compactly with `and_then()`:
+// 这可以使用 `and_then()` 方便重写出更紧凑的代码：
 fn cookable_v2(food: Food) -> Option<Food> {
-    have_recipe(food).and_then(have_ingredients)
+    have_ingredients(food).and_then(have_recipe)
 }
 
 fn eat(food: Food, day: Day) {
@@ -67,10 +63,10 @@ fn main() {
 }
 ```
 
-### See also:
+### 参见：
 
-[closures][closures], [`Option`][option], and [`Option::and_then()`][and_then]
+[闭包][closures]，[`Option::map()`][map], 和 [`Option::and_then()`][and_then]
 
-[closures]: fn/closures.html
-[option]: https://doc.rust-lang.org/std/option/enum.Option.html
-[and_then]: https://doc.rust-lang.org/std/option/enum.Option.html#method.and_then
+[closures]: ./fn/closures.html
+[map]: http://doc.rust-lang.org/std/option/enum.Option.html#method.map
+[and_then]: http://doc.rust-lang.org/std/option/enum.Option.html#method.and_then 

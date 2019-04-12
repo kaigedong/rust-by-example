@@ -1,26 +1,9 @@
-# The `use` declaration
+# `use` 声明
 
-The `use` declaration can be used to bind a full path to a new name, for easier
-access. It is often used like this:
+`use` 声明可以将一个完整的路径绑定到一个新的名字，从而更容易访问。
 
-```rust,editable,ignore
-// extern crate deeply; // normally, this would exist and not be commented out!
-
-use crate::deeply::nested::{
-    my_first_function,
-    my_second_function,
-    AndATraitType
-};
-
-fn main() {
-    my_first_function();
-}
-```
-
-You can use the `as` keyword to bind imports to a different name:
-
-```rust,editable,ignore
-// Bind the `deeply::nested::function` path to `other_function`.
+```rust,editable
+// 将 `deeply::nested::function` 路径绑定到 `other_function`。
 use deeply::nested::function as other_function;
 
 fn function() {
@@ -30,24 +13,24 @@ fn function() {
 mod deeply {
     pub mod nested {
         pub fn function() {
-            println!("called `deeply::nested::function()`");
+            println!("called `deeply::nested::function()`")
         }
     }
 }
 
 fn main() {
-    // Easier access to `deeply::nested::function`
+    // 更容易访问 `deeply::nested::funcion`
     other_function();
 
     println!("Entering block");
     {
-        // This is equivalent to `use deeply::nested::function as function`.
-        // This `function()` will shadow the outer one.
-        use crate::deeply::nested::function;
+        // 这和 `use deeply::nested::function as function` 等价。
+        // 此 `function()` 将覆盖掉的外部同名函数。
+        use deeply::nested::function;
         function();
 
-        // `use` bindings have a local scope. In this case, the
-        // shadowing of `function()` is only in this block.
+        // `use` 绑定拥有局部作用域。在这个例子中，`function()`
+        // 的覆盖只限定在这个代码块中。
         println!("Leaving block");
     }
 

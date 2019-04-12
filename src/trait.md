@@ -1,25 +1,21 @@
-# Traits
+# 特性 trait
 
-A `trait` is a collection of methods defined for an unknown type:
-`Self`. They can access other methods declared in the same trait.
+`trait` 是对未知类型定义的方法集：`Self`。它们可以访问同一个 trait 中定义的方法。
 
-Traits can be implemented for any data type. In the example below,
-we define `Animal`, a group of methods. The `Animal` `trait` is 
-then implemented for the `Sheep` data type, allowing the use of 
-methods from `Animal` with a `Sheep`.
+对任何数据类型实现 trait 都是可行的。在下面例子中，我们定义了包含一系列方法的 `Animal`。然后针对 `Sheep` 数据类型实现 `Animal` `trait`，允许使用来自带有 `Sheep` 的 `Animal` 的方法（原文：allowing the use of methods from `Animal` with a `Sheep`）。
 
 ```rust,editable
 struct Sheep { naked: bool, name: &'static str }
 
 trait Animal {
-    // Static method signature; `Self` refers to the implementor type.
+    // 静态方法标记；`Self` 表示实现者类型（implementor type）。
     fn new(name: &'static str) -> Self;
 
-    // Instance method signatures; these will return a string.
+    // 实例方法（instance method）标记；这些方法将返回一个字符串。
     fn name(&self) -> &'static str;
     fn noise(&self) -> &'static str;
 
-    // Traits can provide default method definitions.
+    // trait 可以提供默认方法定义（method definition）。
     fn talk(&self) {
         println!("{} says {}", self.name(), self.noise());
     }
@@ -32,7 +28,7 @@ impl Sheep {
 
     fn shear(&mut self) {
         if self.is_naked() {
-            // Implementor methods can use the implementor's trait methods.
+            // 实现者（implementor）可以使用实现者的 trait 方法。
             println!("{} is already naked...", self.name());
         } else {
             println!("{} gets a haircut!", self.name);
@@ -42,9 +38,9 @@ impl Sheep {
     }
 }
 
-// Implement the `Animal` trait for `Sheep`.
+// 对 `Sheep` 实现 `Animal` trait。
 impl Animal for Sheep {
-    // `Self` is the implementor type: `Sheep`.
+    // `Self` 是该实现者类型：`Sheep`。
     fn new(name: &'static str) -> Sheep {
         Sheep { name: name, naked: false }
     }
@@ -61,17 +57,17 @@ impl Animal for Sheep {
         }
     }
     
-    // Default trait methods can be overridden.
+    // 默认 trait 方法可以重载。
     fn talk(&self) {
-        // For example, we can add some quiet contemplation.
+        // 例如完们可以增加一些安静的沉思（quiet contemplation）。
         println!("{} pauses briefly... {}", self.name, self.noise());
     }
 }
 
 fn main() {
-    // Type annotation is necessary in this case.
+    // 这种情况需要类型标注。
     let mut dolly: Sheep = Animal::new("Dolly");
-    // TODO ^ Try removing the type annotations.
+    // 试一试 ^ 移除类型标注。
 
     dolly.talk();
     dolly.shear();

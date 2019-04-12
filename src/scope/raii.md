@@ -1,45 +1,41 @@
 # RAII
 
-Variables in Rust do more than just hold data in the stack: they also *own*
-resources, e.g. `Box<T>` owns memory in the heap. Rust enforces [RAII][raii]
-(Resource Acquisition Is Initialization), so whenever an object goes out of
-scope, its destructor is called and its owned resources are freed.
+Rust 的变量不只是在栈中保存数据：它们也**占有**资源，比如 `Box<T>` 占有堆中的内存。Rust 强制实行 [RAII][raii]（Resource Acquisition Is Initiallization，资源获取即初始化），所以任何一个对象在离开作用域时，它的析构器（destructor）都被调用以及它的资源都被释放。
 
-This behavior shields against *resource leak* bugs, so you'll never have to
-manually free memory or worry about memory leaks again! Here's a quick showcase:
+这种行为避免了**资源泄露**（*resource leak*）的错误，所以你再也不用手动释放内存或者担心内存泄露（memory leak）！下面是个快速入门示例：
 
 ```rust,editable
 // raii.rs
 fn create_box() {
-    // Allocate an integer on the heap
+    // 在堆上分配一个整型数据
     let _box1 = Box::new(3i32);
 
-    // `_box1` is destroyed here, and memory gets freed
+    // `_box1` 在这里销毁，而且内存得到释放
 }
 
 fn main() {
-    // Allocate an integer on the heap
+    // 在堆上分配一个整型数据    
     let _box2 = Box::new(5i32);
 
-    // A nested scope:
+    // 嵌套作用域：
     {
-        // Allocate an integer on the heap
+        // 在堆上分配一个整型数据
         let _box3 = Box::new(4i32);
 
-        // `_box3` is destroyed here, and memory gets freed
+        // `_box3` 在这里销毁，而且内存得到释放        
     }
 
-    // Creating lots of boxes just for fun
-    // There's no need to manually free memory!
+    // 创建很多 box，纯属娱乐。
+    // 完全不需要手动释放内存！
     for _ in 0u32..1_000 {
         create_box();
     }
 
-    // `_box2` is destroyed here, and memory gets freed
+    // `_box2` 在这里销毁，而且内存得到释放    
 }
 ```
 
-Of course, we can double check for memory errors using [`valgrind`][valgrind]:
+当然我们可以使用 [`valgrind`][valgrind] 对内存错误进行仔细检查：
 
 ```bash
 $ rustc raii.rs && valgrind ./raii
@@ -59,38 +55,12 @@ $ rustc raii.rs && valgrind ./raii
 ==26873== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 2 from 2)
 ```
 
-No leaks here!
+完全没有泄露！
 
-## Destructor
-
-The notion of a destructor in Rust is provided through the [`Drop`] trait. The
-destructor is called when the resource goes out of scope. This trait is not
-required to be implemented for every type, only implement it for your type if
-you require its own destructor logic.
-
-Run the below example to see how the [`Drop`] trait works. When the variable in
-the `main` function goes out of scope the custom destructor will be invoked.
-
-```rust,editable
-struct ToDrop;
-
-impl Drop for ToDrop {
-    fn drop(&mut self) {
-        println!("ToDrop is being dropped");
-    }
-}
-
-fn main() {
-    let x = ToDrop;
-    println!("Made a ToDrop!");
-}
-```
-
-### See also:
+### 参见：
 
 [Box][box]
 
-[raii]: https://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization
-[box]: std/box.html
+[raii]: http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization
+[box]: ./std/box.html
 [valgrind]: http://valgrind.org/info/
-[`Drop`]: https://doc.rust-lang.org/std/ops/trait.Drop.html

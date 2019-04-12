@@ -1,15 +1,15 @@
-# while
+# while 循环
 
-The `while` keyword can be used to loop until a condition is met.
+`while` 关键字可以用作当型循环（当条件满足时循环）。
 
-Let's write the infamous [FizzBuzz][fizzbuzz] using a `while` loop.
+让我们用 `while` 循环写一个不怎么出名的 [FizzBuzz][fizzbuzz] 程序。
 
 ```rust,editable
 fn main() {
-    // A counter variable
+    // 计数器变量
     let mut n = 1;
 
-    // Loop while `n` is less than 101
+    // 当 `n` 小于 101 时进入循环操作
     while n < 101 {
         if n % 15 == 0 {
             println!("fizzbuzz");
@@ -21,10 +21,10 @@ fn main() {
             println!("{}", n);
         }
 
-        // Increment counter
+        // 计数器值加1
         n += 1;
     }
 }
 ```
 
-[fizzbuzz]: https://en.wikipedia.org/wiki/Fizz_buzz
+[fizzbuzz]: http://en.wikipedia.org/wiki/Fizz_buzz

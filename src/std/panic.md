@@ -1,38 +1,35 @@
 # `panic!`
 
-The `panic!` macro can be used to generate a panic and start unwinding
-its stack. While unwinding, the runtime will take care of freeing all the
-resources *owned* by the thread by calling the destructor of all its objects.
+`panic!` 宏可用于产生一个 panic （恐慌），并开始展开它的栈。在展开栈的同时，运行时将会释放该线程所**拥有**的所有资源，是通过调用对象的析构函数完成。
 
-Since we are dealing with programs with only one thread, `panic!` will cause the
-program to report the panic message and exit.
+因为我们正在处理的程序只有一个线程，`panic!` 将会引发程序上报 panic 消息并退出。
 
 ```rust,editable,ignore,mdbook-runnable
-// Re-implementation of integer division (/)
+// 再次实现整型的除法（/）
 fn division(dividend: i32, divisor: i32) -> i32 {
     if divisor == 0 {
-        // Division by zero triggers a panic
+        // 除以一个 0 时会引发一个 panic
         panic!("division by zero");
     } else {
         dividend / divisor
     }
 }
 
-// The `main` task
+// `main` 任务
 fn main() {
-    // Heap allocated integer
+    // 堆分配的整数
     let _x = Box::new(0i32);
 
-    // This operation will trigger a task failure
+    // 此操作将会引发一个任务失败
     division(3, 0);
 
     println!("This point won't be reached!");
 
-    // `_x` should get destroyed at this point
+    // `_x` 在此处将被销毁
 }
 ```
 
-Let's check that `panic!` doesn't leak memory.
+由分析知道， panic!不会泄露内存
 
 ```bash
 $ rustc panic.rs && valgrind ./panic

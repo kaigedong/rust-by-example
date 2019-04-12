@@ -1,19 +1,19 @@
-# C-like
+# C 风格用法
 
-`enum` can also be used as C-like enums.
+`enum` 也可以像 C 语言枚举那样使用。
 
 ```rust,editable
-// An attribute to hide warnings for unused code.
+// 隐藏未使用代码警告的属性。
 #![allow(dead_code)]
 
-// enum with implicit discriminator (starts at 0)
+// 拥有隐式辨别值（implicit discriminator）的 enum（从0开始计数）
 enum Number {
     Zero,
     One,
     Two,
 }
 
-// enum with explicit discriminator
+// 拥有显式辨别值（explicit discriminator）的 enum
 enum Color {
     Red = 0xff0000,
     Green = 0x00ff00,
@@ -21,7 +21,7 @@ enum Color {
 }
 
 fn main() {
-    // `enums` can be cast as integers.
+    // `enum` 可以转成整形。
     println!("zero is {}", Number::Zero as i32);
     println!("one is {}", Number::One as i32);
 
@@ -30,8 +30,8 @@ fn main() {
 }
 ```
 
-### See also:
+### 参考：
 
-[casting][cast]
+[类型转换][cast]
 
-[cast]: types/cast.html
+[cast]: ./cast.html

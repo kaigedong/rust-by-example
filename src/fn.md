@@ -1,34 +1,32 @@
-# Functions
+# 函数
 
-Functions are declared using the `fn` keyword. Its arguments are type
-annotated, just like variables, and, if the function returns a value, the
-return type must be specified after an arrow `->`.
+函数使用 `fn` 关键字来声明。函数的参数需要标注类型，就和变量一样，另外如果
+函数返回一个值，返回类型必须在箭头 `->` 之后特别指出来。
 
-The final expression in the function will be used as return value.
-Alternatively, the `return` statement can be used to return a value earlier
-from within the function, even from inside loops or `if`s.
+函数最后的表达式将作为返回值。或者在函数内使用 `return` 语句来提前返回值，
+甚至在循环或 `if` 内部使用。
 
-Let's rewrite FizzBuzz using functions!
+让我们使用函数来重写 FizzBuzz 函数吧！
 
 ```rust,editable
-// Unlike C/C++, there's no restriction on the order of function definitions
+// 和 C/C++ 不一样，Rust 的函数定义位置是没有限制的
 fn main() {
-    // We can use this function here, and define it somewhere later
+    // 我们在这里使用函数，并在后面的其他位置定义它
     fizzbuzz_to(100);
 }
 
-// Function that returns a boolean value
+// 函数返回一个布尔（boolean）值
 fn is_divisible_by(lhs: u32, rhs: u32) -> bool {
-    // Corner case, early return
+    // 极端情况，提前返回（Corner case, early return）
     if rhs == 0 {
         return false;
     }
 
-    // This is an expression, the `return` keyword is not necessary here
+    // 这是一个表达式，这里可以不用 `return` 关键字
     lhs % rhs == 0
 }
 
-// Functions that "don't" return a value, actually return the unit type `()`
+// 函数不返回值，而实际上是返回一个单元类型 `()`
 fn fizzbuzz(n: u32) -> () {
     if is_divisible_by(n, 15) {
         println!("fizzbuzz");
@@ -41,8 +39,7 @@ fn fizzbuzz(n: u32) -> () {
     }
 }
 
-// When a function returns `()`, the return type can be omitted from the
-// signature
+// 当函数返回 `()` 时，可以从标记中删除返回类型
 fn fizzbuzz_to(n: u32) {
     for n in 1..n + 1 {
         fizzbuzz(n);

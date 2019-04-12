@@ -1,24 +1,23 @@
-# Freezing
+# 冻结
 
-When data is immutably borrowed, it also *freezes*. *Frozen* data can't be 
-modified via the original object until all references to it go out of scope:
+当数据被不可变地借用时，它还会**冻结**（*freeze*）。**已冻结**（*frozen*）数据无法通过原始对象来修改，直到指向这些数据的所有引用离开作用域为止。
 
 ```rust,editable,ignore,mdbook-runnable
 fn main() {
     let mut _mutable_integer = 7i32;
 
     {
-        // Borrow `_mutable_integer`
+        // 借用 `_mutable_integer`
         let _large_integer = &_mutable_integer;
 
-        // Error! `_mutable_integer` is frozen in this scope
+        // 报错！`_mutable_integer` 在本作用域被冻结
         _mutable_integer = 50;
-        // FIXME ^ Comment out this line
+        // 改正 ^ 注释掉此行
 
-        // `_large_integer` goes out of scope
+        // `_large_integer` 离开作用域
     }
 
-    // Ok! `_mutable_integer` is not frozen in this scope
+    // 正常运行！`_mutable_integer` 在这作用域没有冻结
     _mutable_integer = 3;
 }
 ```

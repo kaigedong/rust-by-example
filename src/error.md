@@ -1,31 +1,7 @@
-# Error handling
+# 错误处理
 
-Error handling is the process of handling the possibility of failure. For
-example, failing to read a file and then continuing to use that *bad* input
-would clearly be problematic. Noticing and explicitly managing those errors
-saves the rest of the program from various pitfalls.
+错误处理（error handling）是处理可能发生失败情况的过程。例如读取一个文件失败，然后继续使用这个**失效的**输入显然是有问题的。错误处理允许我们以一种显式的方式来发现并处理这类错误，避免了其余代码发生潜在的问题。
 
-There are various ways to deal with errors in Rust, which are described in the
-following subchapters. They all have more or less subtle differences and different
-use cases. As a rule of thumb:
+有关错误处理的更多内容，可参考[官方文档][book]的错误处理的章节。
 
-An explicit `panic` is mainly useful for tests and dealing with unrecoverable errors.
-For prototyping it can be useful, for example when dealing with functions that
-haven't been implemented yet, but in those cases the more descriptive `unimplemented`
-is better. In tests `panic` is a reasonable way to explicitly fail.
-
-The `Option` type is for when a value is optional or when the lack of a value is
-not an error condition. For example the parent of a directory - `/` and `C:` don't
-have one. When dealing with `Option`s, `unwrap` is fine for prototyping and cases
-where it's absolutely certain that there is guaranteed to be a value. However `expect`
-is more useful since it lets you specify an error message in case something goes
-wrong anyway.
-
-When there is a chance that things do go wrong and the caller has to deal with the
-problem, use `Result`. You can `unwrap` and `expect` them as well (please don't
-do that unless it's a test or quick prototype).
-
-For a more rigorous discussion of error handling, refer to the error
-handling section in the [official book][book].
-
-[book]: https://doc.rust-lang.org/book/ch09-00-error-handling.html
+[book]: https://doc.rust-lang.org/book/error-handling.html

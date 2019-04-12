@@ -1,60 +1,52 @@
-# Ownership and moves
+# 所有权和移动
 
-Because variables are in charge of freeing their own resources, 
-**resources can only have one owner**. This also prevents resources 
-from being freed more than once. Note that not all variables own 
-resources (e.g. [references]).
+因为变量要负责释放它们拥有的资源，所以**资源只能拥有一个所有者**。这也防止了资源的重复释放。注意并非所有变量都拥有资源（例如 [references]）。
 
-When doing assignments (`let x = y`) or passing function arguments by value
-(`foo(x)`), the *ownership* of the resources is transferred. In Rust-speak, 
-this is known as a *move*.
+在进行赋值（`let x = y`）或通过值来传递函数参数的时候，资源的**所有权**（*ownership*)会发生转移（transfer）。按照 Rust 的说法，这种方式被称为**移动**（*move*）。
 
-After moving resources, the previous owner can no longer be used. This avoids
-creating dangling pointers.
+在移动资源之后，原来的所有者不能再使用，这可避免悬垂指针的产生。
 
 ```rust,editable
-// This function takes ownership of the heap allocated memory
+// 此函数取倒堆分配的内存的所有权
 fn destroy_box(c: Box<i32>) {
     println!("Destroying a box that contains {}", c);
 
-    // `c` is destroyed and the memory freed
+    // `c` 被销毁且内存得到释放
 }
 
 fn main() {
-    // _Stack_ allocated integer
+    // 栈分配的整型
     let x = 5u32;
 
-    // *Copy* `x` into `y` - no resources are moved
+    // 将 `x` **复制**（*Copy*）到 `y`——不存在资源移动
     let y = x;
 
-    // Both values can be independently used
+    // 两个值都可以独立地使用
     println!("x is {}, and y is {}", x, y);
 
-    // `a` is a pointer to a _heap_ allocated integer
+    // `a` 是一个指向堆分配的整型的指针
     let a = Box::new(5i32);
 
     println!("a contains: {}", a);
 
-    // *Move* `a` into `b`
+    // **移动**（*Move*) `a` 到 `b`
     let b = a;
-    // The pointer address of `a` is copied (not the data) into `b`.
-    // Both are now pointers to the same heap allocated data, but
-    // `b` now owns it.
+    // 把 `a` 的指针地址（非数据）复制到 `b`。现在两者都是指向
+    // 同一个堆分配的数据，但是现在是 `b` 占有它。
     
-    // Error! `a` can no longer access the data, because it no longer owns the
-    // heap memory
+    // 报错！`a` 再也不能访问数据，因为它不再拥有堆上的内存。
     //println!("a contains: {}", a);
-    // TODO ^ Try uncommenting this line
+    // 试一试 ^ 将此行注释去掉
 
-    // This function takes ownership of the heap allocated memory from `b`
+    // 此函数从 `b` 中取得栈分配的内存的所有权
     destroy_box(b);
 
-    // Since the heap memory has been freed at this point, this action would
-    // result in dereferencing freed memory, but it's forbidden by the compiler
-    // Error! Same reason as the previous Error
+    // 此时堆上的内存已经释放掉，而这个操作会导致解引用已释放的内存，
+    // 但这种情况会被编译器会禁止。
+    // 报错！和前面出错的原因一样。
     //println!("b contains: {}", b);
-    // TODO ^ Try uncommenting this line
+    // 试一试 ^ 将此行注释去掉
 }
 ```
 
-[references]: flow_control/match/destructuring/destructure_pointers.html
+[references]: ./flow_control/match/destructuring/destructure_pointers.html

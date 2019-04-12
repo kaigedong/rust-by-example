@@ -1,9 +1,7 @@
-# if/else
+# `if/else`
 
-Branching with `if`-`else` is similar to other languages. Unlike many of them,
-the boolean condition doesn't need to be surrounded by parentheses, and each
-condition is followed by a block. `if`-`else` conditionals are expressions,
-and, all branches must return the same type.
+`if`-`else`分支判断和其他语言类似。与很多语言不同的是，Rust 语言中的布尔判断条件不用小括号包住，
+每个判断条件后连着一个代码块。`if`-`else`条件选择是一个表达式，并且所有分支都必须返回相同的类型。
 
 ```rust,editable
 fn main() {
@@ -21,16 +19,16 @@ fn main() {
         if n < 10 && n > -10 {
             println!(", and is a small number, increase ten-fold");
 
-            // This expression returns an `i32`.
+            // 这条表达式返回一个 `i32` 类型。
             10 * n
         } else {
-            println!(", and is a big number, half the number");
+            println!(", and is a big number, reduce by two");
 
-            // This expression must return an `i32` as well.
+            // 这条表达式也必须返回一个 `i32` 类型。
             n / 2
-            // TODO ^ Try suppressing this expression with a semicolon.
+            // 试一试 ^ 试着加上一个分号来结束这条表达式。
         };
-    //   ^ Don't forget to put a semicolon here! All `let` bindings need it.
+    //   ^ 不要忘记在这里加上一个分号！所有的 `let` 绑定都需要它。
 
     println!("{} -> {}", n, big_n);
 }

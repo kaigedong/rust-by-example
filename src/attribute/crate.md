@@ -1,18 +1,11 @@
-# Crates
+# `crate`
 
-The `crate_type` attribute can be used to tell the compiler whether a crate is
-a binary or a library (and even which type of library), and the `crate_name`
-attribute can be used to set the name of the crate.
-
-However, it is important to note that both the `crate_type` and `crate_name`
-attributes have **no** effect whatsoever when using Cargo, the Rust package
-manager. Since Cargo is used for the majority of Rust projects, this means
-real-world uses of `crate_type` and `crate_name` are relatively limited.
+`crate_type` 属性可以告知编译器  crate 是一个二进制的可执行文件还是一个库（甚至是哪种类型的库），`crate_time` 属性可以设定 crate 的名称。
 
 ```rust,editable
-// This crate is a library
+// 这个 crate 是一个库文件
 #![crate_type = "lib"]
-// The library is named "rary"
+// 库的名称为 “rary”
 #![crate_name = "rary"]
 
 pub fn public_function() {
@@ -30,8 +23,7 @@ pub fn indirect_access() {
 }
 ```
 
-When the `crate_type` attribute is used, we no longer need to pass the
-`--crate-type` flag to `rustc`.
+当用到 `crate_type` 属性时，就不再需要给 `rustc` 命令加上 `--crate-type` 标记。
 
 ```bash
 $ rustc lib.rs

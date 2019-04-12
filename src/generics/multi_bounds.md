@@ -1,7 +1,6 @@
-# Multiple bounds
+# 多重限定
 
-Multiple bounds can be applied with a `+`. Like normal, different types are
-separated with `,`.
+使用多重限定（multiple bounds）可以用 `+` 连接。和平常一样，不同的类型使用 `,` 隔开。
 
 ```rust,editable
 use std::fmt::{Debug, Display};
@@ -12,8 +11,8 @@ fn compare_prints<T: Debug + Display>(t: &T) {
 }
 
 fn compare_types<T: Debug, U: Debug>(t: &T, u: &U) {
-    println!("t: `{:?}`", t);
-    println!("u: `{:?}`", u);
+    println!("t: `{:?}", t);
+    println!("u: `{:?}", u);
 }
 
 fn main() {
@@ -23,15 +22,15 @@ fn main() {
 
     compare_prints(&string);
     //compare_prints(&array);
-    // TODO ^ Try uncommenting this.
+    // 试一试 ^ 将此行注释去掉。
 
     compare_types(&array, &vec);
 }
 ```
 
-### See also:
+### 参见：
 
-[`std::fmt`][fmt] and [`trait`s][traits]
+[`std::fmt`][fmt] 和 [`trait`][traits]
 
-[fmt]: hello/print.html
-[traits]: trait.html
+[fmt]: ./hello/print.html
+[traits]: ./trait.html

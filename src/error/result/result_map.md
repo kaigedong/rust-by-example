@@ -1,66 +1,29 @@
-# `map` for `Result`
+# 关于 `Result` 的 `map`
 
-Panicking in the previous example's `multiply` does not make for robust code.
-Generally, we want to return the error to the caller so it can decide what is
-the right way to respond to errors.
+前面关于 panic 例子，提供给我们的是一个无用的错误消息。为了避免这样，我们需要更具体地指定返回类型。在那个例子中，该常规元素为 `i32` 类型。
 
-We first need to know what kind of error type we are dealing with. To determine
-the `Err` type, we look to [`parse()`][parse], which is implemented with the
-[`FromStr`][from_str] trait for [`i32`][i32]. As a result, the `Err` type is
-specified as [`ParseIntError`][parse_int_error].
+为了确定 `Err` 的类型，我们可以借助 [`parse()`][parse]，它使用 [`FromStr`][from_str] trait 来针对 [`i32`][i32] 实现。结果是，`Err` 类型被指定为 [`ParseIntError`][parse_int_error]。
 
-In the example below, the straightforward `match` statement leads to code
-that is overall more cumbersome.
+在下面例子中要注意，使用简单的 `match` 语句会导致更加繁琐的代码。事实证明，用到 `Option` 的 `map` 方法也对 `Result` 进行了实现。
+
+幸运的是，`Option` 的 `map` 方法是对 `Result` 进行了实现的许多组合算子之一。 [`enum.Result`][result] 包含一个完整的列表。
 
 ```rust,editable
 use std::num::ParseIntError;
 
-// With the return type rewritten, we use pattern matching without `unwrap()`.
-fn multiply(first_number_str: &str, second_number_str: &str) -> Result<i32, ParseIntError> {
-    match first_number_str.parse::<i32>() {
-        Ok(first_number)  => {
-            match second_number_str.parse::<i32>() {
-                Ok(second_number)  => {
-                    Ok(first_number * second_number)
-                },
-                Err(e) => Err(e),
-            }
-        },
+// 返回类型重写之后，我们使用模式匹配，而不使用 `unwrap()`。
+fn double_number(number_str: &str) -> Result<i32, ParseIntError> {
+    match number_str.parse::<i32>() {
+        Ok(n)  => Ok(2 * n),
         Err(e) => Err(e),
     }
 }
 
-fn print(result: Result<i32, ParseIntError>) {
-    match result {
-        Ok(n)  => println!("n is {}", n),
-        Err(e) => println!("Error: {}", e),
-    }
-}
-
-fn main() {
-    // This still presents a reasonable answer.
-    let twenty = multiply("10", "2");
-    print(twenty);
-
-    // The following now provides a much more helpful error message.
-    let tt = multiply("t", "2");
-    print(tt);
-}
-```
-
-Luckily, `Option`'s `map`, `and_then`, and many other combinators are also
-implemented for `Result`. [`Result`][result] contains a complete listing.
-
-```rust,editable
-use std::num::ParseIntError;
-
-// As with `Option`, we can use combinators such as `map()`.
-// This function is otherwise identical to the one above and reads:
-// Modify n if the value is valid, otherwise pass on the error.
-fn multiply(first_number_str: &str, second_number_str: &str) -> Result<i32, ParseIntError> {
-    first_number_str.parse::<i32>().and_then(|first_number| {
-        second_number_str.parse::<i32>().map(|second_number| first_number * second_number)
-    })
+// 就像 `Option`，我们可以使用组合算子，如 `map()`。
+// 此函数在其他方面和上述的示例一样，并表示：
+// 若值有效则修改 n，否则传递错误。
+fn double_number_map(number_str: &str) -> Result<i32, ParseIntError> {
+    number_str.parse::<i32>().map(|n| 2 * n)
 }
 
 fn print(result: Result<i32, ParseIntError>) {
@@ -71,18 +34,18 @@ fn print(result: Result<i32, ParseIntError>) {
 }
 
 fn main() {
-    // This still presents a reasonable answer.
-    let twenty = multiply("10", "2");
+    // 这里仍然给出一个合理的答案。
+    let twenty = double_number("10");
     print(twenty);
 
-    // The following now provides a much more helpful error message.
-    let tt = multiply("t", "2");
+    // 下面提供了更加有用的错误消息。
+    let tt = double_number_map("t");
     print(tt);
 }
 ```
 
 [parse]: https://doc.rust-lang.org/std/primitive.str.html#method.parse
-[from_str]: https://doc.rust-lang.org/std/str/trait.FromStr.html
-[i32]: https://doc.rust-lang.org/std/primitive.i32.html
-[parse_int_error]: https://doc.rust-lang.org/std/num/struct.ParseIntError.html
-[result]: https://doc.rust-lang.org/std/result/enum.Result.html
+[from_str]: http://doc.rust-lang.org/std/str/trait.FromStr.html
+[i32]: http://doc.rust-lang.org/std/primitive.i32.html
+[parse_int_error]: http://doc.rust-lang.org/std/num/struct.ParseIntError.html
+[result]: http://doc.rust-lang.org/std/result/enum.Result.html

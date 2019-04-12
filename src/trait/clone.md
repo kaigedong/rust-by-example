@@ -1,53 +1,50 @@
 # Clone
 
-When dealing with resources, the default behavior is to transfer them during
-assignments or function calls. However, sometimes we need to make a 
-copy of the resource as well.
+当处理资源时，默认的行为是在赋值或函数调用的同时将它们转移。但是我们有时候也需要得到一份资源的复制。
 
-The [`Clone`][clone] trait helps us do exactly this. Most commonly, we can 
-use the `.clone()` method defined by the `Clone` trait.
+[`Clone`][clone] trait 正好帮助我们完成这任务。更普遍地，我们可以使用由 `Clone` trait 定义的方法。
 
 ```rust,editable
-// A unit struct without resources
+// 不含资源的单元结构体
 #[derive(Debug, Clone, Copy)]
 struct Nil;
 
-// A tuple struct with resources that implements the `Clone` trait
+// 包含实现 `Clone` trait 的资源的元组结构体
 #[derive(Clone, Debug)]
 struct Pair(Box<i32>, Box<i32>);
 
 fn main() {
-    // Instantiate `Nil`
+    // 实例化 `Nil`
     let nil = Nil;
-    // Copy `Nil`, there are no resources to move
+    // 复制 `Nil`，没有资源用于移动（move）
     let copied_nil = nil;
 
-    // Both `Nil`s can be used independently
+    // 两个 `Nil` 都可以独立使用
     println!("original: {:?}", nil);
     println!("copy: {:?}", copied_nil);
 
-    // Instantiate `Pair`
+    // 实例化 `Pair`
     let pair = Pair(Box::new(1), Box::new(2));
     println!("original: {:?}", pair);
 
-    // Copy `pair` into `moved_pair`, moves resources
+    // 将 `pair` 复制到 `moved_pair`，移动（move）了资源
     let moved_pair = pair;
     println!("copy: {:?}", moved_pair);
 
-    // Error! `pair` has lost its resources
+    // 报错！`pair` 已失去了它的资源。
     //println!("original: {:?}", pair);
-    // TODO ^ Try uncommenting this line
-    
-    // Clone `moved_pair` into `cloned_pair` (resources are included)
+    // 试一试 ^ 将此行注释去掉。
+
+    // 将 `moved_pair` 克隆到 `cloned_pair`（包含资源）
     let cloned_pair = moved_pair.clone();
-    // Drop the original pair using std::mem::drop
+    // 使用 std::mem::drop 来销毁原始的 pair。
     drop(moved_pair);
 
-    // Error! `moved_pair` has been dropped
+    // 报错！`moved_pair` 已被销毁。
     //println!("copy: {:?}", moved_pair);
-    // TODO ^ Try uncommenting this line
+    // 试一试 ^ 将此行注释掉。
 
-    // The result from .clone() can still be used!
+    // 由 .clone() 得来的结果仍然可用！
     println!("clone: {:?}", cloned_pair);
 }
 ```

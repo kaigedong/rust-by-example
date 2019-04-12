@@ -1,7 +1,7 @@
-# File hierarchy
+# 文件分层
 
-Modules can be mapped to a file/directory hierarchy. Let's break down the
-[visibility example][visibility] in files:
+模块可以分配到文件/目录的层次结构中。让我们将[可见性小节例子][visibility]
+的代码拆开分到多个文件中：
 
 ```bash
 $ tree .
@@ -13,11 +13,11 @@ $ tree .
 `-- split.rs
 ```
 
-In `split.rs`:
+在 `split.rs` 文件：
 
 ```rust,ignore
-// This declaration will look for a file named `my.rs` or `my/mod.rs` and will
-// insert its contents inside a module named `my` under this scope
+// 此声明将会查找名为 `my.rs` 或 `my/mod.rs` 的文件，并将该文件的内容插入到
+// 此作用域名为 `my` 的模块里面。
 mod my;
 
 fn function() {
@@ -33,15 +33,13 @@ fn main() {
 
     my::nested::function();
 }
-
 ```
 
-In `my/mod.rs`:
+在 `my/mod.rs` 文件：
 
 ```rust,ignore
-// Similarly `mod inaccessible` and `mod nested` will locate the `nested.rs`
-// and `inaccessible.rs` files and insert them here under their respective
-// modules
+// 类似地，`mod inaccessible` 和 `mod nested` 将找到 `nested.rs` 和
+// `inaccessible.rs` 文件，并在它们各自的模块中插入它们的内容。
 mod inaccessible;
 pub mod nested;
 
@@ -60,7 +58,7 @@ pub fn indirect_access() {
 }
 ```
 
-In `my/nested.rs`:
+在 `my/nested.rs` 文件：
 
 ```rust,ignore
 pub fn function() {
@@ -73,7 +71,7 @@ fn private_function() {
 }
 ```
 
-In `my/inaccessible.rs`:
+在 `my/inaccessible.rs` 文件：
 
 ```rust,ignore
 #[allow(dead_code)]
@@ -82,7 +80,7 @@ pub fn public_function() {
 }
 ```
 
-Let's check that things still work as before:
+我们看到代码仍然正常运行，就和前面的一样：
 
 ```bash
 $ rustc split.rs && ./split
@@ -93,4 +91,4 @@ called `my::indirect_access()`, that
 called `my::nested::function()`
 ```
 
-[visibility]: mod/visibility.html
+[visibility]: ./mod/visibility.html

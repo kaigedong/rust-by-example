@@ -1,30 +1,23 @@
-# aliases for `Result`
+# 给 `Result` 起别名
 
-How about when we want to reuse a specific `Result` type many times?
-Recall that Rust allows us to create [aliases][typealias]. Conveniently,
-we can define one for the specific `Result` in question.
+当我们要重复多次使用特定的 `Result` 类型怎么办呢？回忆一下，Rust 允许我们创建[别名][typealias]。对问题中提到的特定 `Result`，我们可以很方便地给它定义一个别名。
 
-At a module level, creating aliases can be particularly helpful. Errors
-found in a specific module often have the same `Err` type, so a single alias
-can succinctly define *all* associated `Results`. This is so useful that the
-`std` library even supplies one: [`io::Result`][io_result]!
+在单个模块的级别上创建别名特别有帮助。在特定模块中发现的错误常常会有相同的 `Err` 类型，所以一个单一的别名就能简便地定义**所有的**关联 `Result`。这点太重要了，甚至标准库也提供了一个： `io::Result`！
 
-Here's a quick example to show off the syntax:
+下面给出一个快速示例来展示语法：
 
 ```rust,editable
 use std::num::ParseIntError;
 
-// Define a generic alias for a `Result` with the error type `ParseIntError`.
+// 为带有错误类型 `ParseIntError` 的 `Result` 定义一个泛型别名。
 type AliasedResult<T> = Result<T, ParseIntError>;
 
-// Use the above alias to refer to our specific `Result` type.
-fn multiply(first_number_str: &str, second_number_str: &str) -> AliasedResult<i32> {
-    first_number_str.parse::<i32>().and_then(|first_number| {
-        second_number_str.parse::<i32>().map(|second_number| first_number * second_number)
-    })
+// 使用上面定义过的别名来表示我们特指的 `Result` 类型。
+fn double_number(number_str: &str) -> AliasedResult<i32> {
+    number_str.parse::<i32>().map(|n| 2 * n)
 }
 
-// Here, the alias again allows us to save some space.
+// 这里的别名又让我们节省了一些空间（save some space）。
 fn print(result: AliasedResult<i32>) {
     match result {
         Ok(n)  => println!("n is {}", n),
@@ -33,14 +26,15 @@ fn print(result: AliasedResult<i32>) {
 }
 
 fn main() {
-    print(multiply("10", "2"));
-    print(multiply("t", "2"));
+    print(double_number("10"));
+    print(double_number("t"));
 }
 ```
 
-### See also:
+### 参见：
 
-[`io::Result`][io_result]
+[`Result`][result] 和 [`io::Result`][io_result]
 
-[typealias]: types/alias.html
-[io_result]: https://doc.rust-lang.org/std/io/type.Result.html
+[typealias]: ./cast/alias.html
+[result]: http://doc.rust-lang.org/std/result/enum.Result.html
+[io_result]: http://doc.rust-lang.org/std/io/type.Result.html

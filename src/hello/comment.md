@@ -1,51 +1,44 @@
-# Comments
+# 注释
 
-Any program requires comments and indeed Rust supports
-a few different varieties:
+注释对任何程序都不可缺少，同样 Rust 支持几种不同的注释方式。
 
-* *Regular comments* which are ignored by the compiler:
- - `// Line comments which go to the end of the line.`
- - `/* Block comments which go to the closing delimiter. */`
-* *Doc comments* which are parsed into HTML library
-[documentation][docs]:
- - `/// Generate library docs for the following item.`
- - `//! Generate library docs for the enclosing item.`
+* **普通注释**，其注释内容将被编译器忽略掉：
+ - `// 单行注释，注释内容直到行尾。 `
+ - `/* 块注释， 注释内容一直到结束分隔符。 */`
+* **文档注释**，其注释内容将被解析成 HTML 帮助[文档][docs]:
+ - `/// 对接下来的项生成帮助文档。`
+ - `//! 对封闭项生成帮助文档。`
 
 ```rust,editable
 fn main() {
-    // This is an example of a line comment
-    // Notice how there are two slashes at the beginning of the line
-    // And that nothing written inside these will be read by the compiler
+    // 这是行注释的例子
+    // 注意这里有两个斜线在本行的开头
+    // 在这里面的所有内容编译器都不会读取
 
     // println!("Hello, world!");
 
-    // Run it. See? Now try deleting the two slashes, and run it again.
-
-    /* 
-     * This is another type of comment, the block comment. In general,
-     * the line comment is the recommended comment style however the
-     * block comment is extremely useful for temporarily disabling
-     * a large chunk of code. /* Block comments can be /* nested, */ */
-     * so it takes only a few keystrokes to comment out all the lines
-     * in this main() function. /*/*/* Try it yourself! */*/*/
-     */
+    // 想要运行上述语句？现在请将上述语句的两条斜线删掉，并重新运行。
 
     /*
-    Note, the previous column of `*` was entirely for style. There's
-    no actual need for it.
-    */
+     * 这是另外一种格式的注释——块注释。一般而言，行注释是推荐的注释格式，
+     * 不过块注释在临时注释大块代码特别有用。/* 块注释可以 /* 嵌套, */ */
+     * 所以只需很少按键就可注释掉这些在 main() 函数中的行。/*/*/* 赶紧试试！*/*/*/
+     */
 
-    // Observe how block comments allow easy expression manipulation
-    // which line comments do not. Deleting the comment delimiters
-    // will change the result:
-    let x = 5 + /* 90 + */ 5;
-    println!("Is `x` 10 or 100? x = {}", x);
+     /*
+      注意，上面的例子中纵向都有 `*`，这完全是基于格式考虑，实际上这并不是
+      必须的。
+      */
+
+     // 观察块注释是如何对简单的表达式进行控制，而行注释不能这样操作。
+     // 删除注释分隔符将会改变结果。
+     let x = 5 + /* 90 + */ 5;
+     println!("Is `x` 10 or 100? x = {}", x);
 }
-
 ```
 
-### See also:
+### 参见:
 
-[Library documentation][docs]
+[文档注释][docs]
 
-[docs]: meta/doc.html
+[docs]: ./meta/doc.html

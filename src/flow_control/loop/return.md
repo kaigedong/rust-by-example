@@ -1,9 +1,6 @@
-# Returning from loops
+# 从 loop 循环中返回
 
-One of the uses of a `loop` is to retry an operation until it succeeds. If the
-operation returns a value though, you might need to pass it to the rest of the
-code: put it after the `break`, and it will be returned by the `loop`
-expression.
+`loop` 有个用途是尝试一个操作直到成功为止。若操作返回一个值，则可能需要将其传递给代码的其余部分：将该值放在 `break` 之后，并由 `loop` 表达式返回。
 
 ```rust,editable
 fn main() {

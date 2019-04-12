@@ -1,18 +1,17 @@
-# Declare first
+# 变量先声明
 
-It's possible to declare variable bindings first, and initialize them later.
-However, this form is seldom used, as it may lead to the use of uninitialized
-variables.
+Rust 语言可以先声明变量绑定，后面才将它们初始化。但是这种情况用得很少，因为这样很可能导致使用未
+初始的变量。
 
 ```rust,editable,ignore,mdbook-runnable
 fn main() {
-    // Declare a variable binding
+    // 声明一个变量绑定
     let a_binding;
 
     {
         let x = 2;
 
-        // Initialize the binding
+        // 初始化一个绑定
         a_binding = x * x;
     }
 
@@ -20,9 +19,9 @@ fn main() {
 
     let another_binding;
 
-    // Error! Use of uninitialized binding
+    // 报错！使用了未初始化的绑定
     println!("another binding: {}", another_binding);
-    // FIXME ^ Comment out this line
+    // 改正 ^ 注释掉此行
 
     another_binding = 1;
 
@@ -30,5 +29,4 @@ fn main() {
 }
 ```
 
-The compiler forbids use of uninitialized variables, as this would lead to
-undefined behavior.
+编译器禁止使用未经初始化的变量，因为这会产生未定义行为（undefined behavior）。

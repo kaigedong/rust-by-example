@@ -1,7 +1,6 @@
-# Mutability
+# 可变变量
 
-Variable bindings are immutable by default, but this can be overridden using
-the `mut` modifier.
+变量绑定默认是不可变的，但加上 `mut` 修饰语后变量就可以改变。
 
 ```rust,editable,ignore,mdbook-runnable
 fn main() {
@@ -10,15 +9,15 @@ fn main() {
 
     println!("Before mutation: {}", mutable_binding);
 
-    // Ok
+    // 正确代码
     mutable_binding += 1;
 
     println!("After mutation: {}", mutable_binding);
 
-    // Error!
+    // 错误！
     _immutable_binding += 1;
-    // FIXME ^ Comment out this line
+    // 改正 ^ 将此行注释掉
 }
 ```
 
-The compiler will throw a detailed diagnostic about mutability errors.
+编译器将会抛出一堆关于变量可变性的错误提示信息。

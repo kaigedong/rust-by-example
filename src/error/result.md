@@ -1,83 +1,39 @@
-# `Result`
+# 结果 `Result`
 
-[`Result`][result] is a richer version of the [`Option`][option] type that
-describes possible *error* instead of possible *absence*.
+[`Result`][result] 是 [`Option`][option] 类型的更丰富的版本，描述的是可能的**错误**而不是可能的**不存在**。
 
-That is, `Result<T, E>` could have one of two outcomes:
+也就是说，`Result<T，E>` 可以有两个结果的其中一个：
 
-* `Ok<T>`: An element `T` was found
-* `Err<E>`: An error was found with element `E`
+* `Ok<T>`：找到 `T` 元素
+* `Err<E>`：发现错误，使用元素 `E` 表示（An error was found with element `E`）
 
-By convention, the expected outcome is `Ok` while the unexpected outcome is `Err`.
+按照约定，预期结果是 “Ok”，而意外结果是 “Err”。
 
-Like `Option`, `Result` has many methods associated with it. `unwrap()`, for
-example, either yields the element `T` or `panic`s. For case handling,
-there are many combinators between `Result` and `Option` that overlap.
+和 `Option` 类似，`Result` 也有很多相关联的方法。例如 `unwrap（）`，能够产生元素 `T` 或 `panic`。 对于事件的处理，`Result` 和 `Option` 两者间有很多组合算子重叠。
 
-In working with Rust, you will likely encounter methods that return the
-`Result` type, such as the [`parse()`][parse] method. It might not always
-be possible to parse a string into the other type, so `parse()` returns a
-`Result` indicating possible failure.
+使用 Rust 过程中，你可能会遇到返回 `Result` 类型的方法，例如 [`parse()`][parse] 方法。 它在某些情况下可能不能将一个字符串解析为另一种类型，所以 `parse()` 返回一个 `Result` 表示可能的失败。
 
-Let's see what happens when we successfully and unsuccessfully `parse()` a string:
+我们来看看当 `parse()` 字符串成功和失败时会发生什么：
 
 ```rust,editable,ignore,mdbook-runnable
-fn multiply(first_number_str: &str, second_number_str: &str) -> i32 {
-    // Let's try using `unwrap()` to get the number out. Will it bite us?
-    let first_number = first_number_str.parse::<i32>().unwrap();
-    let second_number = second_number_str.parse::<i32>().unwrap();
-    first_number * second_number
+fn double_number(number_str: &str) -> i32 {
+    // 让我们尝试使用 `unwrap()` 把数字取出来。它会咬我们吗？
+    2 * number_str.parse::<i32>().unwrap()
 }
 
 fn main() {
-    let twenty = multiply("10", "2");
+    let twenty = double_number("10");
     println!("double is {}", twenty);
 
-    let tt = multiply("t", "2");
+    let tt = double_number("t");
     println!("double is {}", tt);
 }
 ```
 
-In the unsuccessful case, `parse()` leaves us with an error for `unwrap()`
-to `panic` on. Additionally, the `panic` exits our program and provides an
-unpleasant error message.
+在失败的情况下，`parse()` 留给我们一个错误，让 `unwrap()` 产生 `panic`（原文：`parse()` leaves us with an error for `unwrap()` to `panic` on）。另外，`panic` 会退出我们的程序，并提供一个不愉快的错误消息。
 
-To improve the quality of our error message, we should be more specific
-about the return type and consider explicitly handling the error.
+为了改善错误消息的质量，我们应该更具体地了解返回类型并考虑显式地处理错误。
 
-## Using `Result` in `main`
-
-The `Result` type can also be the return type of the `main` function if
-specified explicitly. Typically the `main` function will be of the form:
-
-```rust
-fn main() {
-    println!("Hello World!");
-}
-```
-
-However `main` is also able to have a return type of `Result`. If an error
-occurs within the `main` function it will return an error code and print a debug
-representation of the error (using the [`Debug`] trait). The following example
-shows such a scenario and touches on aspects covered in [the following section].
-
-```rust,editable
-use std::num::ParseIntError;
-
-fn main() -> Result<(), ParseIntError> {
-    let number_str = "10";
-    let number = match number_str.parse::<i32>() {
-        Ok(number)  => number,
-        Err(e) => return Err(e),
-    };
-    println!("{}", number);
-    Ok(())
-}
-```
-
-
-[option]: https://doc.rust-lang.org/std/option/enum.Option.html
-[result]: https://doc.rust-lang.org/std/result/enum.Result.html
+[option]: http://doc.rust-lang.org/std/option/enum.Option.html
+[result]: http://doc.rust-lang.org/std/result/enum.Result.html
 [parse]: https://doc.rust-lang.org/std/primitive.str.html#method.parse
-[`Debug`]: https://doc.rust-lang.org/std/fmt/trait.Debug.html
-[the following section]: error/result/early_returns.html

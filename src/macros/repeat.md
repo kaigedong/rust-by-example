@@ -1,21 +1,17 @@
-# Repeat
+# 重复
 
-Macros can use `+` in the argument list to indicate that an argument may
-repeat at least once, or `*`, to indicate that the argument may repeat zero or
-more times.
+宏在参数列表中可以使用 `+` 来表示一个参数可能出现一次或多次，使用 `*` 来表示该参数可能出现零次或多次。
 
-In the following example, surrounding the matcher with `$(...),+` will
-match one or more expression, separated by commas.
-Also note that the semicolon is optional on the last case.
+在下面例子中，使用 `$(...),+` 包含的内容将匹配一个或多个表达式，使用逗号隔开。还注意到分号对于最后一种情形是可选的。
 
 ```rust,editable
-// `min!` will calculate the minimum of any number of arguments.
+// `min!` 将求出任意数量的参数的最小值。
 macro_rules! find_min {
-    // Base case:
+    // 基本情形：
     ($x:expr) => ($x);
-    // `$x` followed by at least one `$y,`
+    // `$x` 后面跟着至少一个 `$y,`
     ($x:expr, $($y:expr),+) => (
-        // Call `find_min!` on the tail `$y`
+        // 对尾部的 `$y` 调用 `find_min!` 
         std::cmp::min($x, find_min!($($y),+))
     )
 }

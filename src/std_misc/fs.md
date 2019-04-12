@@ -1,6 +1,6 @@
-# Filesystem Operations
+# 文件系统操作
 
-The `std::fs` module contains several functions that deal with the filesystem.
+`std::io::fs` 模块包含几个处理文件系统的函数。
 
 ```rust,ignore
 use std::fs;
@@ -10,9 +10,9 @@ use std::io::prelude::*;
 use std::os::unix;
 use std::path::Path;
 
-// A simple implementation of `% cat path`
+// `% cat path` 的简单实现
 fn cat(path: &Path) -> io::Result<String> {
-    let mut f = File::open(path)?;
+    let mut f = try!(File::open(path));
     let mut s = String::new();
     match f.read_to_string(&mut s) {
         Ok(_) => Ok(s),
@@ -20,14 +20,14 @@ fn cat(path: &Path) -> io::Result<String> {
     }
 }
 
-// A simple implementation of `% echo s > path`
+// `% echo s > path` 的简单实现
 fn echo(s: &str, path: &Path) -> io::Result<()> {
-    let mut f = File::create(path)?;
+    let mut f = try!(File::create(path));
 
     f.write_all(s.as_bytes())
 }
 
-// A simple implementation of `% touch path` (ignores existing files)
+// `% touch path`（忽略已存在文件）的简单实现
 fn touch(path: &Path) -> io::Result<()> {
     match OpenOptions::new().create(true).write(true).open(path) {
         Ok(_) => Ok(()),
@@ -37,20 +37,20 @@ fn touch(path: &Path) -> io::Result<()> {
 
 fn main() {
     println!("`mkdir a`");
-    // Create a directory, returns `io::Result<()>`
+    // 创建一个目录，返回 `io::Result<()>`
     match fs::create_dir("a") {
         Err(why) => println!("! {:?}", why.kind()),
         Ok(_) => {},
     }
 
     println!("`echo hello > a/b.txt`");
-    // The previous match can be simplified using the `unwrap_or_else` method
+    // 前面的匹配可以用 `unwrap_or_else` 方法简化
     echo("hello", &Path::new("a/b.txt")).unwrap_or_else(|why| {
         println!("! {:?}", why.kind());
     });
 
     println!("`mkdir -p a/c/d`");
-    // Recursively create a directory, returns `io::Result<()>`
+    // 递归创建一个目录，返回 `io::Result<()>`
     fs::create_dir_all("a/c/d").unwrap_or_else(|why| {
         println!("! {:?}", why.kind());
     });
@@ -61,7 +61,7 @@ fn main() {
     });
 
     println!("`ln -s ../b.txt a/c/b.txt`");
-    // Create a symbolic link, returns `io::Result<()>`
+    // 创建一个符号链接，返回 `io::Resutl<()>`
     if cfg!(target_family = "unix") {
         unix::fs::symlink("../b.txt", "a/c/b.txt").unwrap_or_else(|why| {
         println!("! {:?}", why.kind());
@@ -75,7 +75,7 @@ fn main() {
     }
 
     println!("`ls a`");
-    // Read the contents of a directory, returns `io::Result<Vec<Path>>`
+    // 读取目录的内容，返回 `io::Result<Vec<Path>>`
     match fs::read_dir("a") {
         Err(why) => println!("! {:?}", why.kind()),
         Ok(paths) => for path in paths {
@@ -84,21 +84,20 @@ fn main() {
     }
 
     println!("`rm a/c/e.txt`");
-    // Remove a file, returns `io::Result<()>`
+    // 删除一个文件，返回 `io::Result<()>`
     fs::remove_file("a/c/e.txt").unwrap_or_else(|why| {
         println!("! {:?}", why.kind());
     });
 
     println!("`rmdir a/c/d`");
-    // Remove an empty directory, returns `io::Result<()>`
+    // 移除一个空目录，返回 `io::Result<()>`
     fs::remove_dir("a/c/d").unwrap_or_else(|why| {
         println!("! {:?}", why.kind());
     });
 }
-
 ```
 
-Here's the expected successful output:
+下面是预期成功的输出：
 
 ```bash
 $ rustc fs.rs && ./fs
@@ -110,13 +109,19 @@ $ rustc fs.rs && ./fs
 `cat a/c/b.txt`
 > hello
 `ls a`
-> "a/b.txt"
-> "a/c"
+> a/b.txt
+> a/c
+`walk a`
+> a/c
+> a/c/b.txt
+> a/c/e.txt
+> a/c/d
+> a/b.txt
 `rm a/c/e.txt`
 `rmdir a/c/d`
 ```
 
-And the final state of the `a` directory is:
+且 `a` 目录的最终状态为：
 
 ```text
 $ tree a
@@ -128,7 +133,7 @@ a
 1 directory, 2 files
 ```
 
-An alternative way to define the function `cat` is with `?` notation:
+另一种定义 `cat` 函数的方式是使用 `?` 标记：
 
 ```rust,ignore
 fn cat(path: &Path) -> io::Result<String> {
@@ -139,8 +144,8 @@ fn cat(path: &Path) -> io::Result<String> {
 }
 ```
 
-### See also:
+### 参见：
 
 [`cfg!`][cfg]
 
-[cfg]: attribute/cfg.html
+[cfg]: ../attribute/cfg.html

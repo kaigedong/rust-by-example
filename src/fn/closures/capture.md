@@ -1,16 +1,16 @@
-# Capturing
+# 捕获
 
-Closures are inherently flexible and will do what the functionality requires
-to make the closure work without annotation. This allows capturing to
-flexibly adapt to the use case, sometimes moving and sometimes borrowing.
-Closures can capture variables:
+闭包本身是相当灵活的，可以实现所需功能来让闭包运行而不用类型标注（原文：Closures are inherently flexible and will do what the functionality requires
+to make the closure work without annotation）。这允许变量捕获灵活地适应使用
+情况，有时是移动（moving）有时是借用（borrowing）（原文：This allows capturing to
+flexibly adapt to the use case, sometimes moving and sometimes borrowing.）。闭包可以捕获变量：
 
-* by reference: `&T`
-* by mutable reference: `&mut T`
-* by value: `T`
+* 通过引用：`&T`
+* 通过可变引用：`&mut T`
+* 通过值：`T`
 
-They preferentially capture variables by reference and only go lower when
-required.
+它们更倾向于通过引用来捕获变量并且只在需要时才用后面用法（原文：They preferentially capture variables by reference and only go lower when
+required.）。
 
 ```rust,editable
 fn main() {
@@ -18,84 +18,68 @@ fn main() {
     
     let color = "green";
 
-    // A closure to print `color` which immediately borrows (`&`)
-    // `color` and stores the borrow and closure in the `print`
-    // variable. It will remain borrowed until `print` goes out of
-    // scope. `println!` only requires `by reference` so it doesn't
-    // impose anything more restrictive.
+    // 闭包打印 `color`，它会马上借用（`&`）`color` 并将该借用和闭包存储
+    // 到 `print` 变量中。它会一保持借用状态直到 `print` 离开作用域。
+    // `println!` 只需要`通过引用`，所以它没有采用更多任何限制性的内容。
+    // （原文：`println!` only requires `by reference` so it doesn't
+    // impose anything more restrictive.）
     let print = || println!("`color`: {}", color);
 
-    // Call the closure using the borrow.
+    // 使用借用来调用闭包。
     print();
     print();
 
     let mut count = 0;
 
-    // A closure to increment `count` could take either `&mut count`
-    // or `count` but `&mut count` is less restrictive so it takes
-    // that. Immediately borrows `count`.
+    // 闭包使 `count` 值增加，可以使用 `&mut count` 或者 `count`，
+    // 但 `&mut count` 限制更少，所以采用它。立刻借用 `count`。
+    // （原文： A closure to increment `count` could take either
+    // `&mut count` or `count` but `&mut count` is less restrictive so
+    // it takes that. Immediately borrows `count`.）
     //
-    // A `mut` is required on `inc` because a `&mut` is stored inside.
-    // Thus, calling the closure mutates the closure which requires
-    // a `mut`.
+    // `inc` 前面需要加上 `mut`，因为 `&mut` 会必存储的内部。
+    // 因此，调用该闭包转变成需要一个 `mut` 的闭包。
+    // （原文：A `mut` is required on `inc` because a `&mut` is stored
+    // inside. Thus, calling the closure mutates the closure which requires
+    // a `mut`.）
     let mut inc = || {
         count += 1;
         println!("`count`: {}", count);
     };
 
-    // Call the closure.
+    // 调用闭包。
     inc();
     inc();
 
-    //let _reborrow = &mut count;
-    // ^ TODO: try uncommenting this line.
+    //let reborrow = &mut count;
+    // ^ 试一试： 将此行注释去掉。
     
-    // A non-copy type.
+    // 不可复制类型（non-copy type）。
     let movable = Box::new(3);
 
     // `mem::drop` requires `T` so this must take by value. A copy type
     // would copy into the closure leaving the original untouched.
-    // A non-copy must move and so `movable` immediately moves into
-    // the closure.
+    // 
+    // `mem::drop` 要求 `T`，所以这必须通过值来实现（原文：`mem::drop`
+    // requires `T` so this must take by value.）。可复制类型将会复制
+    // 值到闭包而不会用到原始值。不可复制类型必须移动（move），从而
+    // `可移动`（movable） 立即移动到闭包中（原文：A non-copy must
+    // move and so `movable` immediately moves into the closure）。
     let consume = || {
         println!("`movable`: {:?}", movable);
         mem::drop(movable);
     };
 
-    // `consume` consumes the variable so this can only be called once.
+    // `consume` 消费（consume）了该变量，所以这只能调用一次。
     consume();
     //consume();
-    // ^ TODO: Try uncommenting this line.
+    // ^ 试一试：将此行注释去掉。
 }
 ```
 
-Using `move` before vertical pipes forces closure
-to take ownership of captured variables:
+### 参见：
 
-```rust,editable
-fn main() {
-    // `Vec` has non-copy semantics.
-    let haystack = vec![1, 2, 3];
+[`Box`][box] 和 [`std::mem::drop`][drop]
 
-    let contains = move |needle| haystack.contains(needle);
-
-    println!("{}", contains(&1));
-    println!("{}", contains(&4));
-
-    // `println!("There're {} elements in vec", haystack.len());`
-    // ^ Uncommenting above line will result in compile-time error
-    // because borrow checker doesn't allow re-using variable after it
-    // has been moved.
-    
-    // Removing `move` from closure's signature will cause closure
-    // to borrow _haystack_ variable immutably, hence _haystack_ is still
-    // available and uncommenting above line will not cause an error.
-}
-```
-
-### See also:
-
-[`Box`][box] and [`std::mem::drop`][drop]
-
-[box]: std/box.html
-[drop]: https://doc.rust-lang.org/std/mem/fn.drop.html
+[box]: ./std/box.html
+[drop]: http://doc.rust-lang.org/std/mem/fn.drop.html

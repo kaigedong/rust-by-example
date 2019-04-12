@@ -1,8 +1,7 @@
-# Nesting and labels
+# 嵌套循环和标签
 
-It's possible to `break` or `continue` outer loops when dealing with nested
-loops. In these cases, the loops must be annotated with some `'label`, and the
-label must be passed to the `break`/`continue` statement.
+在处理嵌套循环的时候可以`中断（break）`或`继续（continue）`外层循环。在这类情形中，循环必须用一
+些`'label`（标签）来注明，并且标签传递给 `break`/`continue` 语句。
 
 ```rust,editable
 #![allow(unreachable_code)]
@@ -14,10 +13,10 @@ fn main() {
         'inner: loop {
             println!("Entered the inner loop");
 
-            // This would break only the inner loop
+            // 这只是中断内部的循环
             //break;
 
-            // This breaks the outer loop
+            // 这会中断外层循环
             break 'outer;
         }
 

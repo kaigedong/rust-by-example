@@ -1,16 +1,15 @@
-# DRY (Don't Repeat Yourself)
+# DRY (不写重复代码)
 
-Macros allow writing DRY code by factoring out the common parts of functions
-and/or test suites. Here is an example that implements and tests the `+=`, `*=`
-and `-=` operators on `Vec<T>`:
+通过提取函数或测试单元的公共部分，宏允许编写 DRY 代码（DRY 是 Don't Repeat Yourself 的缩写，意思为“不要写重复代码”）。这里给出一个例子，实现并测试了关于 `Vec<T>` 的 `+=`、`*=` 和 `-=` 等运算符。
 
 ```rust,editable
 use std::ops::{Add, Mul, Sub};
 
 macro_rules! assert_equal_len {
-    // The `tt` (token tree) designator is used for
-    // operators and tokens.
-    ($a:ident, $b:ident, $func:ident, $op:tt) => (
+    // `tt` （token tree，令牌树）指示符用于运算符和令牌。
+    // （原文：The `tt` (token tree) designator is used for
+    // operators and tokens.）
+    ($a:ident, $b: ident, $func:ident, $op:tt) => (
         assert!($a.len() == $b.len(),
                 "{:?}: dimension mismatch: {:?} {:?} {:?}",
                 stringify!($func),
@@ -33,7 +32,7 @@ macro_rules! op {
     )
 }
 
-// Implement `add_assign`, `mul_assign`, and `sub_assign` functions.
+// 实现 `add_assign`、`mul_assign` 和 `sub_assign` 等函数。
 op!(add_assign, Add, +=, add);
 op!(mul_assign, Mul, *=, mul);
 op!(sub_assign, Sub, -=, sub);
@@ -41,7 +40,7 @@ op!(sub_assign, Sub, -=, sub);
 mod test {
     use std::iter;
     macro_rules! test {
-        ($func:ident, $x:expr, $y:expr, $z:expr) => {
+        ($func: ident, $x:expr, $y:expr, $z:expr) => {
             #[test]
             fn $func() {
                 for size in 0usize..10 {
@@ -57,11 +56,12 @@ mod test {
         }
     }
 
-    // Test `add_assign`, `mul_assign`, and `sub_assign`.
+    // 测试 `add_assign`、`mul_assign` 和 `sub_assign`
     test!(add_assign, 1u32, 2u32, 3u32);
     test!(mul_assign, 2u32, 3u32, 6u32);
     test!(sub_assign, 3u32, 2u32, 1u32);
 }
+
 ```
 
 ```bash

@@ -1,3 +1,3 @@
-# Examples in `std`
+# `std` 中的例子
 
-This section contains a few examples of using closures from the `std` library.
+本小节列出几个标准库中使用闭包例子。

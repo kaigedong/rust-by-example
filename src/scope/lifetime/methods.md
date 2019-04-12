@@ -1,12 +1,12 @@
-# Methods
+# 方法
 
-Methods are annotated similarly to functions:
+方法的标注和函数类似：
 
 ```rust,editable
 struct Owner(i32);
 
 impl Owner {
-    // Annotate lifetimes as in a standalone function.
+    // 标注生命周期，就像独立的函数一样。
     fn add_one<'a>(&'a mut self) { self.0 += 1; }
     fn print<'a>(&'a self) {
         println!("`print`: {}", self.0);
@@ -14,15 +14,16 @@ impl Owner {
 }
 
 fn main() {
-    let mut owner = Owner(18);
+    let mut owner  = Owner(18);
 
     owner.add_one();
     owner.print();
 }
 ```
 
-### See also:
+### 参见：
 
-[methods]
+[methods][methods]
 
-[methods]: fn/methods.html
+
+[methods]: ./fn/methods.html

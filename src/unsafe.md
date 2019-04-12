@@ -1,22 +1,14 @@
-# Unsafe Operations
+# 不安全操作
 
-As an introduction to this section, to borrow from [the official docs][unsafe],
-"one should try to minimize the amount of unsafe code in a code base." With that
-in mind, let's get started! Unsafe annotations in Rust are used to bypass
-protections put in place by the compiler; specifically, there are four primary
-things that unsafe is used for:
+为了介绍本章内容，我们借用[官方文档](http://doc.rust-lang.org/book/unsafe.html)的一句话, “在基本代码中尽可能减少不安全的代码”（"one should try to minimize the amount of unsafe code in a code base."）。记住这句话，接着我们进入学习！在 Rust 中，不安全代码块是用于避开编译器的保护策略；具体地说，不安全代码块主要有 4 方面内容：
 
-* dereferencing raw pointers
-* calling functions or methods which are `unsafe` (including calling a function
-  over FFI, see [a previous chapter](std_misc/ffi.html) of the book) 
-* accessing or modifying static mutable variables
-* implementing unsafe traits
+* 解引用裸指针
+* 通过 FFI 调用函数（这个内容在本书其他章节介绍过了）
+* 使用 `std::mem::transmute` 来强制转型（change type）
+* 内联汇编(inline assembly)
 
-### Raw Pointers
-Raw pointers `*` and references `&T` function similarly, but references are
-always safe because they are guaranteed to point to valid data due to the
-borrow checker. Dereferencing a raw pointer can only be done through an unsafe
-block.
+### 原始指针
+原始指针（裸指针） `*` 和引用 `&T` 有类似的功能，但引用总是安全的，因为它们保证指向一个有效的数据，这得益于借用检查器（borrow checker）。解引用一个裸指针只能通过不安全代码块中来完成。
 
 ```rust,editable
 fn main() {
@@ -28,34 +20,15 @@ fn main() {
 }
 ```
 
-### Calling Unsafe Functions
-Some functions can be declared as `unsafe`, meaning it is the programmer's
-responsibility to ensure correctness instead of the compiler's. One example
-of this is [`std::slice::from_raw_parts`] which will create a slice given a
-pointer to the first element and a length.
+### Transmute（转变）
+从一种类型变到另一种类型的允许简单转换，但是两种类型必须拥有相同的大小和排列：
 
 ```rust,editable
-use std::slice;
-
 fn main() {
-    let some_vector = vec![1, 2, 3, 4];
-
-    let pointer = some_vector.as_ptr();
-    let length = some_vector.len();
+    let u: &[u8] = &[49, 50, 51];
 
     unsafe {
-        let my_slice: &[u32] = slice::from_raw_parts(pointer, length);
-
-        assert_eq!(some_vector.as_slice(), my_slice);
+        assert!(u == std::mem::transmute::<&str, &[u8]>("123"));
     }
 }
 ```
-
-For `slice::from_raw_parts`, one of the assumptions which *must* be upheld is 
-that the pointer passed in points to valid memory and that the memory pointed to
-is of the correct type. If these invariants aren't upheld then the program's 
-behaviour is undefined and there is no knowing what will happen.
-
-
-[unsafe]: https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html
-[`std::slice::from_raw_parts`]: https://doc.rust-lang.org/std/slice/fn.from_raw_parts.html

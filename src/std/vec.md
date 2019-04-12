@@ -1,66 +1,40 @@
-# Vectors
+# 动态数组 vector
 
-Vectors are re-sizable arrays. Like slices, their size is not known at compile
-time, but they can grow or shrink at any time. A vector is represented using
-3 words: a pointer to the data, its length, and its capacity. The capacity
-indicates how much memory is reserved for the vector. The vector can grow as
-long as the length is smaller than the capacity. When this threshold needs to
-be surpassed, the vector is reallocated with a larger capacity.
+vector 是可变大小的数组。和 slice（切片）类似，它们的大小在编译期不可预知，但他们可以随时扩大或缩小。一个 vector 使用 3 个词来表示：一个指向数据的指针，它的长度，还有它的容量。此容量表明了分配多少内存给这 vector。vector 只要小于该容量，就可以随意增长。当临界值就要达到时，vector 会重新分配一个更大的容量。
 
 ```rust,editable,ignore,mdbook-runnable
 fn main() {
-    // Iterators can be collected into vectors
+    // 迭代器可以收集到 vector
     let collected_iterator: Vec<i32> = (0..10).collect();
     println!("Collected (0..10) into: {:?}", collected_iterator);
 
-    // The `vec!` macro can be used to initialize a vector
+    // `vec!` 宏可用来初始化一个 vector
     let mut xs = vec![1i32, 2, 3];
     println!("Initial vector: {:?}", xs);
 
-    // Insert new element at the end of the vector
+    // 在 vector 的尾部插入一个新的元素
     println!("Push 4 into the vector");
     xs.push(4);
     println!("Vector: {:?}", xs);
 
-    // Error! Immutable vectors can't grow
+    // 报错！不可变 vector 不可增长
     collected_iterator.push(0);
-    // FIXME ^ Comment out this line
+    // 改正 ^ 将此行注释掉
 
-    // The `len` method yields the current size of the vector
+    // `len` 方法获得一个 vector 的当前大小
     println!("Vector size: {}", xs.len());
 
-    // Indexing is done using the square brackets (indexing starts at 0)
+    // 在中括号上加索引（索引从 0 开始）
     println!("Second element: {}", xs[1]);
 
-    // `pop` removes the last element from the vector and returns it
+    // `pop` 移除 vector 的最后一个元素并将它返回
     println!("Pop last element: {:?}", xs.pop());
 
-    // Out of bounds indexing yields a panic
+    // 超出索引范围将抛出一个 panic
     println!("Fourth element: {}", xs[3]);
-    // FIXME ^ Comment out this line
-
-    // `Vector`s can be easily iterated over
-    println!("Contents of xs:");
-    for x in xs.iter() {
-        println!("> {}", x);
-    }
-
-    // A `Vector` can also be iterated over while the iteration
-    // count is enumerated in a separate variable (`i`)
-    for (i, x) in xs.iter().enumerate() {
-        println!("In position {} we have value {}", i, x);
-    }
-
-    // Thanks to `iter_mut`, mutable `Vector`s can also be iterated
-    // over in a way that allows modifying each value
-    for x in xs.iter_mut() {
-        *x *= 3;
-    }
-    println!("Updated vector: {:?}", xs);
 }
 ```
 
-More `Vec` methods can be found under the
-[std::vec][vec] module
+更多 `Vec` 方法可以在 [std::vec][vec] 模块中找到。
 
-[vec]: https://doc.rust-lang.org/std/vec/
+[vec]: http://doc.rust-lang.org/std/vec/

@@ -1,17 +1,16 @@
-# enums
+# 枚举
 
-An `enum` is destructured similarly:
+和前面相似，解构 `enum` 方式如下：
 
 ```rust,editable
-// `allow` required to silence warnings because only
-// one variant is used.
+// 需要 `allow` 来消除警告，因为只使用了一个变量。
 #[allow(dead_code)]
 enum Color {
-    // These 3 are specified solely by their name.
+    // 这三者仅由它们的名字来表示。
     Red,
     Blue,
     Green,
-    // These likewise tie `u32` tuples to different names: color models.
+    // 这些元组含有类似的 `u32` 元素，分别对应不同的名字：颜色模型（color models）。
     RGB(u32, u32, u32),
     HSV(u32, u32, u32),
     HSL(u32, u32, u32),
@@ -21,10 +20,10 @@ enum Color {
 
 fn main() {
     let color = Color::RGB(122, 17, 40);
-    // TODO ^ Try different variants for `color`
+    // 试一试 ^ 将不同的值赋给 `color`
 
     println!("What color is it?");
-    // An `enum` can be destructured using a `match`.
+    // 可以使用 `match` 来解构 `enum`。
     match color {
         Color::Red   => println!("The color is Red!"),
         Color::Blue  => println!("The color is Blue!"),
@@ -40,15 +39,15 @@ fn main() {
         Color::CMYK(c, m, y, k) =>
             println!("Cyan: {}, magenta: {}, yellow: {}, key (black): {}!",
                 c, m, y, k),
-        // Don't need another arm because all variants have been examined
+        // 不需要其它分支，因为所有的情形都已覆盖
     }
 }
 ```
 
-### See also:
+### 参见：
 
-[`#[allow(...)]`][allow], [color models][color_models] and [`enum`][enum]
+[`#[allow(...)]`][allow], [color models][color_models] 和 [`enum`][enum] 
 
-[allow]: attribute/unused.html
-[color_models]: https://en.wikipedia.org/wiki/Color_model
-[enum]: custom_types/enum.html
+[allow]: ./attribute/unused.html
+[color_models]: http://en.wikipedia.org/wiki/Color_model
+[enum]: ./custom_types/enum.html

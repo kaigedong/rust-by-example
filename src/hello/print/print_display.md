@@ -1,75 +1,66 @@
-# Display
+# 显示
 
-`fmt::Debug` hardly looks compact and clean, so it is often advantageous to
-customize the output appearance. This is done by manually implementing
-[`fmt::Display`][fmt], which uses the `{}` print marker. Implementing it
-looks like this:
+`fmt::Debug` 看起来并不简洁，然而它对自定义输出外观通常是有好处的。而[`fmt::Display`]
+[fmt]是通过手动的方式来实现，采用了`{}`来打印标记。实现方式看起来像这样：
 
 ```rust
-// Import (via `use`) the `fmt` module to make it available.
+// (使用 `use`)导入 `fmt` 模块使 `fmt::Display` 可用
 use std::fmt;
 
-// Define a structure which `fmt::Display` will be implemented for. This is simply
-// a tuple struct containing an `i32` bound to the name `Structure`.
+// 定义一个结构体，使用 `fmt::Display` 来实现。这只是简单地给元组结构体`Structure` 包含
+// 一个 `i32` 元素。
 struct Structure(i32);
 
-// In order to use the `{}` marker, the trait `fmt::Display` must be implemented
-// manually for the type.
+// 为了使用 `{}` 标记，必须手动实现 `fmt::Display` trait 来支持相应类型。
 impl fmt::Display for Structure {
-    // This trait requires `fmt` with this exact signature.
+    // 这个 trait 要求 `fmt` 带有正确的标记
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        // Write strictly the first element into the supplied output
-        // stream: `f`. Returns `fmt::Result` which indicates whether the
-        // operation succeeded or failed. Note that `write!` uses syntax which
-        // is very similar to `println!`.
+        // 严格将第一个元素写入到给定的输出流 `f`。返回 `fmt:Result`，此结果表明操作成功
+        // 或失败。注意这里的 `write!` 用法和 `println!` 很相似。
         write!(f, "{}", self.0)
     }
 }
 ```
 
-`fmt::Display` may be cleaner than `fmt::Debug` but this presents
-a problem for the `std` library. How should ambiguous types be displayed?
-For example, if the `std` library implemented a single style for all
-`Vec<T>`, what style should it be? Either of these two?
+`fmt::display` 的使用形式可能比 `fmt::Debug` 简洁，但它对于标准库的处理有一个问题。模棱
+两可的类型该如何显示呢？举个例子，假设标准库对所有的 `Vec<T>` 都实现了单一样式，那么它应该
+是那种样式？随意一种或者包含两种？
 
 * `Vec<path>`: `/:/etc:/home/username:/bin` (split on `:`)
 * `Vec<number>`: `1,2,3` (split on `,`)
 
-No, because there is no ideal style for all types and the `std` library
-doesn't presume to dictate one. `fmt::Display` is not implemented for `Vec<T>`
-or for any other generic containers. `fmt::Debug` must then be used for these
-generic cases.
+答案是否定的，因为没有合适的样式适用于所有类型，标准库也没规定一种情况。对于 `Vec<T>` 或其
+他任意泛型容器(container)，`fmt::Display` 都没有实现形式。在这种含有泛型的情况下要用到
+ `fmt::Debug`。
 
-This is not a problem though because for any new *container* type which is
-*not* generic,`fmt::Display` can be implemented.
+而对于非泛型的容器类型的输出， `fmt::Display` 都能够实现。
 
 ```rust,editable
-use std::fmt; // Import `fmt`
+use std::fmt; // 导入 `fmt`
 
-// A structure holding two numbers. `Debug` will be derived so the results can
-// be contrasted with `Display`.
+// 带有两个数字的结构体。`Debug` 将被派生，可以看到输出结果和 `Display` 的差异。
 #[derive(Debug)]
 struct MinMax(i64, i64);
 
-// Implement `Display` for `MinMax`.
+// 实现 `MinMax` 的 `Display`。
 impl fmt::Display for MinMax {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        // Use `self.number` to refer to each positional data point.
+        // 使用 `self.number` 方式来表示各个数据。
         write!(f, "({}, {})", self.0, self.1)
     }
 }
 
-// Define a structure where the fields are nameable for comparison.
+// 为了比较，定义一个含有字段的结构体。
 #[derive(Debug)]
 struct Point2D {
     x: f64,
     y: f64,
 }
 
-// Similarly, implement for Point2D
+// 类似地对 Point2D 进行实现
 impl fmt::Display for Point2D {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        // Customize so only `x` and `y` are denoted.
+        // 自定义方式实现，仅让 `x` 和 `y` 标识出来。
         write!(f, "x: {}, y: {}", self.x, self.y)
     }
 }
@@ -94,36 +85,33 @@ fn main() {
     println!("Display: {}", point);
     println!("Debug: {:?}", point);
 
-    // Error. Both `Debug` and `Display` were implemented but `{:b}`
-    // requires `fmt::Binary` to be implemented. This will not work.
+    // 报错。`Debug` 和 `Display` 都被实现了，但 `{:b}` 需要 `fmt::Binary`
+    // 得到实现。这语句不能运行。
     // println!("What does Point2D look like in binary: {:b}?", point);
 }
 ```
 
-So, `fmt::Display` has been implemented but `fmt::Binary` has not, and
-therefore cannot be used. `std::fmt` has many such [`traits`][traits] and
-each requires its own implementation. This is detailed further in
-[`std::fmt`][fmt].
+`fmt::Display` 都实现了，而 `fmt::Binary` 都没有，因此 `fmt::Binary` 不能使用。
+`std::fmt` 有很多这样的 [`traits`][traits]，使用这些 trait 都要有各自的实现。这些内容将
+在后面的 [`std::fmt`][fmt] 章节中详细介绍。
 
-### Activity
+### 动手试一试
 
-After checking the output of the above example, use the `Point2D` struct as
-guide to add a Complex struct to the example. When printed in the same
-way, the output should be:
-
-```txt
+对上面程序的运行结果检验完毕后，在上述示例程序中，仿照 `Point2` 结构体增加一个复数结构体。
+使用一样的方式打印，输出结果要求这个样子：
+```
 Display: 3.3 + 7.2i
 Debug: Complex { real: 3.3, imag: 7.2 }
 ```
 
-### See also
+### 参见：
 
 [`derive`][derive], [`std::fmt`][fmt], [macros], [`struct`][structs],
-[`trait`][traits], and [use][use]
+[`trait`][traits], 和 [use][use]
 
-[derive]: trait/derive.html
-[fmt]: https://doc.rust-lang.org/std/fmt/
-[macros]: macros.html
-[structs]: custom_types/structs.html
-[traits]: trait.html
-[use]: mod/use.html
+[derive]: ./trait/derive.html
+[fmt]: http://doc.rust-lang.org/std/fmt/
+[macros]: ./macros.html
+[structs]: ./custom_types/structs.html
+[traits]: ./trait.html
+[use]: ./mod/use.html

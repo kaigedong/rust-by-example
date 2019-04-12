@@ -1,24 +1,24 @@
-# tuples
+# 元组
 
-Tuples can be destructured in a `match` as follows:
+元组可以在 `match` 中解构，如下所示：
 
 ```rust,editable
 fn main() {
     let pair = (0, -2);
-    // TODO ^ Try different values for `pair`
+    // 试一试 ^ 将不同的值赋给 `pair`
 
     println!("Tell me about {:?}", pair);
-    // Match can be used to destructure a tuple
+    // match 可以解构一个元组
     match pair {
-        // Destructure the second
+        // 绑定到第二个元素
         (0, y) => println!("First is `0` and `y` is `{:?}`", y),
         (x, 0) => println!("`x` is `{:?}` and last is `0`", x),
         _      => println!("It doesn't matter what they are"),
-        // `_` means don't bind the value to a variable
+        // `_` 表示不将值绑定到变量
     }
 }
 ```
 
-### See also:
+### 参见：
 
-[Tuples](primitives/tuples.html)
+[元组](./primitives/tuples.html)

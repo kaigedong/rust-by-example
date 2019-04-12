@@ -1,84 +1,43 @@
-# Visibility
+# 可见性
 
-By default, the items in a module have private visibility, but this can be
-overridden with the `pub` modifier. Only the public items of a module can be
-accessed from outside the module scope.
+项（item）默认情况下拥有私有的可见性（private visibility），不过可以加上 `pub` （public 的前 3 个字母）修饰语（modifier）来改变默认行为。一个模块之外的作用域只能访问该模块里面的公有项（public item）。
 
 ```rust,editable
-// A module named `my_mod`
-mod my_mod {
-    // Items in modules default to private visibility.
+// 一个名为 `my` 的模块
+mod my {
+    // 在模块中的项默认带有私有可见性。
     fn private_function() {
-        println!("called `my_mod::private_function()`");
+        println!("called `my::private_function()`");
     }
 
-    // Use the `pub` modifier to override default visibility.
+    // 使用 `pub` 修饰语来改变默认可见性。
     pub fn function() {
-        println!("called `my_mod::function()`");
+        println!("called `my::function()`");
     }
-
-    // Items can access other items in the same module,
-    // even when private.
+    
+    // 在同一模块中，项可以访问其它项，即使是私有属性。
     pub fn indirect_access() {
-        print!("called `my_mod::indirect_access()`, that\n> ");
+        print!("called `my::indirect_access()`, that\n> ");
         private_function();
     }
 
-    // Modules can also be nested
+    // 项也可以嵌套。
     pub mod nested {
         pub fn function() {
-            println!("called `my_mod::nested::function()`");
+            println!("called `my::nested::function()`");
         }
 
         #[allow(dead_code)]
         fn private_function() {
-            println!("called `my_mod::nested::private_function()`");
-        }
-
-        // Functions declared using `pub(in path)` syntax are only visible
-        // within the given path. `path` must be a parent or ancestor module
-        pub(in crate::my_mod) fn public_function_in_my_mod() {
-            print!("called `my_mod::nested::public_function_in_my_mod()`, that\n > ");
-            public_function_in_nested()
-        }
-
-        // Functions declared using `pub(self)` syntax are only visible within
-        // the current module, which is the same as leaving them private
-        pub(self) fn public_function_in_nested() {
-            println!("called `my_mod::nested::public_function_in_nested");
-        }
-
-        // Functions declared using `pub(super)` syntax are only visible within
-        // the parent module
-        pub(super) fn public_function_in_super_mod() {
-            println!("called my_mod::nested::public_function_in_super_mod");
+            println!("called `my::nested::private_function()`");
         }
     }
-
-    pub fn call_public_function_in_my_mod() {
-        print!("called `my_mod::call_public_funcion_in_my_mod()`, that\n> ");
-        nested::public_function_in_my_mod();
-        print!("> ");
-        nested::public_function_in_super_mod();
-    }
-
-    // pub(crate) makes functions visible only within the current crate
-    pub(crate) fn public_function_in_crate() {
-        println!("called `my_mod::public_function_in_crate()");
-    }
-
-    // Nested modules follow the same rules for visibility
+    
+    // 嵌套项的可见性遵循相同的规则。
     mod private_nested {
         #[allow(dead_code)]
         pub fn function() {
-            println!("called `my_mod::private_nested::function()`");
-        }
-
-        // Private parent items will still restrict the visibility of a child item,
-        // even if it is declared as visible within a bigger scope.
-        #[allow(dead_code)]
-        pub(crate) fn restricted_function() {
-            println!("called `my_mod::private_nested::restricted_function()`");
+            println!("called `my::private_nested::function()`");
         }
     }
 }
@@ -88,41 +47,27 @@ fn function() {
 }
 
 fn main() {
-    // Modules allow disambiguation between items that have the same name.
+    // 模块允许在拥有相同名字的项之间消除歧义。
     function();
-    my_mod::function();
+    my::function();
+    
+    // 公有项，包括内部嵌套的公有项，可以在父级的模块中访问到。
+    my::indirect_access();
+    my::nested::function();
 
-    // Public items, including those inside nested modules, can be
-    // accessed from outside the parent module.
-    my_mod::indirect_access();
-    my_mod::nested::function();
-    my_mod::call_public_function_in_my_mod();
+    // 一个模块中的私有项不能被直接访问，即使私有项嵌套在公有的模块中：
 
-    // pub(crate) items can be called from anywhere in the same crate
-    my_mod::public_function_in_crate();
+    // 报错！`private_function` 是私有的。
+    //my::private_function();
+    // 试一试 ^ 将此行注释去掉
 
-    // pub(in path) items can only be called from within the mode specified
-    // Error! function `public_function_in_my_mod` is private
-    //my_mod::nested::public_function_in_my_mod();
-    // TODO ^ Try uncommenting this line
+    // 报错！ `private_function` 是私有的。
+    //my::nested::private_function();
+    // 试一试 ^ 将此行注释去掉    
 
-    // Private items of a module cannot be directly accessed, even if
-    // nested in a public module:
+    // 报错！ `private_nested` 是私有的模块。
+    //my::private_nested::function();
+    // 试一试 ^ 将此行注释去掉    
 
-    // Error! `private_function` is private
-    //my_mod::private_function();
-    // TODO ^ Try uncommenting this line
-
-    // Error! `private_function` is private
-    //my_mod::nested::private_function();
-    // TODO ^ Try uncommenting this line
-
-    // Error! `private_nested` is a private module
-    //my_mod::private_nested::function();
-    // TODO ^ Try uncommenting this line
-
-    // Error! `private_nested` is a private module
-    //my_mod::private_nested::restricted_function();
-    // TODO ^ Try uncommenting this line
 }
 ```

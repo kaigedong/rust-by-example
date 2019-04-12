@@ -1,66 +1,54 @@
-# Rust by Example
+# 通过例子学 Rust
+>《通过例子学 Rust》(Rust by Example 中文版)翻译自 [Rust by Example][website]，内容已全部翻译完成，中文版最后更新时间：2017-10-03。查看此书的 [Github 翻译项目][home]。(Chinese translation of the [Rust by Example][website].)
 
-[Rust][rust] is a modern systems programming language focusing on safety, speed,
-and concurrency. It accomplishes these goals by being memory safe without using 
-garbage collection.
+[Rust][rust] 是一门注重安全（safety）、速度（speed）和并发（concurrency）的现代系统编程语言。Rust 通过内存安全来实现上述目标，但不用垃圾回收机制（Garbage collection, GC)。
 
-Rust by Example (RBE) is a collection of runnable examples that illustrate various Rust
-concepts and standard libraries. To get even more out of these examples, don't forget
-to [install Rust locally][install] and check out the [official docs][std]. 
-Additionally for the curious, you can also [check out the source code for this site][home].
+《通过例子学 Rust》（Rust by Example, RBE）内容由一系列可运行的实例组成，通过这些例子阐明了各种 Rust 的概念和基本库。想获取这些例子外的更多内容，不要忘了[安装 Rust 到本地][install]并查阅[官方文档][std]。另外为了满足您的好奇心，你可以[查阅本网站的源代码][home]。
 
-Now let's begin!
+现在让我们开始学习吧！
 
-- [Hello World](hello.html) - Start with a traditional Hello World program.
+- [Hello World](hello.html) - 从经典的 “Hello World” 程序开始学习。
 
-- [Primitives](primitives.html) - Learn about signed integers, unsigned integers and other primitives.
+- [原生类型](primitives.html) - 学习有符号整型，无符号整型和其他原生类型。
 
-- [Custom Types](custom_types.html) - `struct` and `enum`.
+- [自定义类型](custom_types.html) - 结构体 `struct` 和 枚举 `enum`。
 
-- [Variable Bindings](variable_bindings.html) - mutable bindings, scope, shadowing.
+- [变量绑定](variable_bindings.html) - 变量绑定，作用域，隐藏。
 
-- [Types](types.html) - Learn about changing and defining types.
+- [类型转换](cast.html) - 学习类型之间的显式转换。
 
-- [Conversion](conversion.html)
+- [表达式](expression.html)
 
-- [Expressions](expression.html)
+- [流程控制](flow_control.html) - `if`/`else`，`for`，以及其他流程控制有关内容。
 
-- [Flow Control](flow_control.html) - `if`/`else`, `for`, and others.
+- [函数](fn.html) - 学习方法、闭包和高阶函数。
 
-- [Functions](fn.html) - Learn about Methods, Closures and High Order Functions.
+- [模块](mod.html) - 使用模块来组织代码。
 
-- [Modules](mod.html) - Organize code using modules
+- [`crate`](crates.html) - crate 是 Rust 中的编译单元。学习创建一个库。
 
-- [Crates](crates.html) - A crate is a compilation unit in Rust. Learn to create a library.
+- [属性](attribute.html) - 属性是应用于某些模块、crate 或项的元数据（metadata）。
 
-- [Cargo](cargo.html) - Go through some basic features of the official Rust package management tool.
+- [泛型](generics.html) - 学习编写能够适用于多类型参数的函数或数据类型。
 
-- [Attributes](attribute.html) - An attribute is metadata applied to some module, crate or item.
+- [作用域规则](scope.html) - 作用域在所有权（ownership）、借用（borrowing）和生命周期（lifetime）中起着重要作用。
 
-- [Generics](generics.html) - Learn about writing a function or data type which can work for multiple types of arguments.
+- [特性 trait](trait.html) - trait 是对未知类型定义的方法集：Self。
 
-- [Scoping rules](scope.html) - Scopes play an important part in ownership, borrowing, and lifetimes.
+- [宏](macros.html)
 
-- [Traits](trait.html) - A trait is a collection of methods defined for an unknown type: `Self`
+- [错误处理](error.html) - 学习 Rust 语言处理失败的方式。
 
-- [Macros](macros.html)
+- [标准库类型](std.html) - 学习 `std` 标准库提供的一些自定义类型。
 
-- [Error handling](error.html) - Learn Rust way of handling failures.
+- [标准库更多介绍](std_misc.html) - 更多关于文件处理、线程的自定义类型。
 
-- [Std library types](std.html) - Learn about some custom types provided by `std` library.
+- [补充](meta.html) - 文档和测试
 
-- [Std misc](std_misc.html) - More custom types for file handling, threads.
+- [不安全操作](unsafe.html)
 
-- [Testing](testing.html) - All sorts of testing in Rust.
-
-- [Unsafe Operations](unsafe.html)
-
-- [Compatibility](compatibility.html)
-
-- [Meta](meta.html) - Documentation, Benchmarking.
-
-
-[rust]: https://www.rust-lang.org/
-[install]: https://www.rust-lang.org/tools/install
-[std]: https://doc.rust-lang.org/std/
-[home]: https://github.com/rust-lang/rust-by-example
+[website]: http://rustbyexample.com
+[rust]: http://www.rust-lang.org/
+[install]: http://www.rust-lang.org/install.html
+[std]: http://doc.rust-lang.org/std/
+[home]: https://github.com/rust-lang-cn/rust-by-example-cn

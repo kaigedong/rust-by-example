@@ -1,25 +1,22 @@
-# Traits
+# 特性 trait
 
-Of course `trait`s can also be generic. Here we define one which reimplements
-the `Drop` `trait` as a generic method to `drop` itself and an input.
+当然 `trait` 也可以是泛型。我们在这里定义了一个实现 `Drop` 的 `trait`，作为泛型方法来 `drop`（丢弃） 它本身和输入参数。
 
 ```rust,editable
-// Non-copyable types.
+// 不可复制的类型。
 struct Empty;
 struct Null;
 
-// A trait generic over `T`.
+// 用到 `T` 的trait 泛型。
 trait DoubleDrop<T> {
-    // Define a method on the caller type which takes an
-    // additional single parameter `T` and does nothing with it.
+    // 定义一个关于调用者的方法，接受一个额外的单一参量 `T`，
+    // 且没有任何操作。
     fn double_drop(self, _: T);
 }
 
-// Implement `DoubleDrop<T>` for any generic parameter `T` and
-// caller `U`.
+// 针对泛型参量 `T` 和调用者 `U` 实现了 `DoubleDrop<T>` 。
 impl<T, U> DoubleDrop<T> for U {
-    // This method takes ownership of both passed arguments,
-    // deallocating both.
+    // 此方法获得了两个传入参数的所有权，并释放这两个参数。
     fn double_drop(self, _: T) {}
 }
 
@@ -27,19 +24,19 @@ fn main() {
     let empty = Empty;
     let null  = Null;
 
-    // Deallocate `empty` and `null`.
+    // 释放 `empty` 和 `null`。
     empty.double_drop(null);
 
     //empty;
     //null;
-    // ^ TODO: Try uncommenting these lines.
+    // ^ 试一试：去掉这两行的注释。
 }
 ```
 
-### See also:
+### 参见：
 
-[`Drop`][Drop], [`struct`][structs], and [`trait`][traits]
+[`Drop`][Drop], [`struct`][structs], 和 [`trait`][traits]
 
-[Drop]: https://doc.rust-lang.org/std/ops/trait.Drop.html
-[structs]: custom_types/structs.html
-[traits]: trait.html
+[Drop]: http://doc.rust-lang.org/std/ops/trait.Drop.html
+[structs]: ./custom_types/structs.html
+[traits]: ./trait.html

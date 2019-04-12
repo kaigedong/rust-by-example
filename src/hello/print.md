@@ -1,94 +1,77 @@
-# Formatted print
+# 格式化输出
 
-Printing is handled by a series of [`macros`][macros] defined in [`std::fmt`][fmt]
-some of which include:
+打印操作由[`std::fmt`][fmt]里面所定义的一系列[`宏`][macros]来处理，其中包括：
 
-* `format!`: write formatted text to [`String`][string]
-* `print!`: same as `format!` but the text is printed to the console (io::stdout).
-* `println!`: same as `print!` but a newline is appended.
-* `eprint!`: same as `format!` but the text is printed to the standard error (io::stderr).
-* `eprintln!`: same as `eprint!`but a newline is appended.
+* `format!`：将格式化文本写到[`字符串`][string](String)。(译注: `字符串`是返回值不是参数。)
+* `print!`：与 `format!`类似，但将文本输出到控制台。
+* `println!`: 与 `print!`类似，但输出结果追加一个换行符。
 
-All parse text in the same fashion. A plus is that the formatting correctness will
-be checked at compile time.
+所有的解析文本都以相同的方式进行。另外一点是格式化的正确性在编译时检查。
 
 ```rust,editable,ignore,mdbook-runnable
 fn main() {
-    // In general, the `{}` will be automatically replaced with any
-    // arguments. These will be stringified.
+    // 通常情况下， `{}` 会被任意变量内容所替换。
+    // 值内容会转化成字符串。
     println!("{} days", 31);
 
-    // Without a suffix, 31 becomes an i32. You can change what type 31 is,
-    // with a suffix.
+    // 不加后缀的话，31自动成为 I32 类型。
+    // 你可以添加后缀来改变 31 的原来类型。
 
-    // There are various optional patterns this works with. Positional
-    // arguments can be used.
+    // 下面有多种可选形式。
+    // 可以使用的位置参数。
     println!("{0}, this is {1}. {1}, this is {0}", "Alice", "Bob");
 
-    // As can named arguments.
+    // 可以使用赋值语句。
     println!("{subject} {verb} {object}",
              object="the lazy dog",
              subject="the quick brown fox",
              verb="jumps over");
 
-    // Special formatting can be specified after a `:`.
-    println!("{} of {:b} people know binary, the other half doesn't", 1, 2);
+    // 特殊的格式实现可以在后面加上 `:` 符号。
+    println!("{} of {:b} people know binary, the other half don't", 1, 2);
 
-    // You can right-align text with a specified width. This will output
-    // "     1". 5 white spaces and a "1".
+    // 你可以按指定宽度来右对齐文本。
+    // 下面语句输出"     1"，5个空格后面连着1。
     println!("{number:>width$}", number=1, width=6);
 
-    // You can pad numbers with extra zeroes. This will output "000001".
+    // 你可以对数字左边位数上补0。下面语句输出"000001"。
     println!("{number:>0width$}", number=1, width=6);
 
-    // It will even check to make sure the correct number of arguments are
-    // used.
+    // println! 会检查使用到的参数数量是否正确。
     println!("My name is {0}, {1} {0}", "Bond");
-    // FIXME ^ Add the missing argument: "James"
+    // 改正 ^ 补上漏掉的参数： "James"
 
-    // Create a structure which contains an `i32`. Name it `Structure`.
+    // 创建一个包含` I32 `类型结构体(structure)。命名为 `Structure`。
     #[allow(dead_code)]
     struct Structure(i32);
 
-    // However, custom types such as this structure require more complicated
-    // handling. This will not work.
+    // 但是像结构体这样自定义类型需要更复杂的方式来处理。
+    // 下面语句无法运行。
     println!("This struct `{}` won't print...", Structure(3));
-    // FIXME ^ Comment out this line.
+    // 改正 ^ 注释掉此行。
 }
 ```
 
-[`std::fmt`][fmt] contains many [`traits`][traits] which govern the display
-of text. The base form of two important ones are listed below:
+[`std::fmt`][fmt]包含多种[`traits`][traits]（traits翻译成中文有“特征，特性”等意思）来控制文字显示。这里面有两个重要的基本格式类型如下：
 
-* `fmt::Debug`: Uses the `{:?}` marker. Format text for debugging purposes.
-* `fmt::Display`: Uses the `{}` marker. Format text in a more elegant, user
-friendly fashion.
+* `fmt::Debug`：使用 `{:?}` 作标记。格式化文本以便调试。
+* `fmt::Display`：使用 `{}` 作标记。以优雅和友好的方式来格式文本。
 
-Here, `fmt::Display` was used because the std library provides implementations
-for these types. To print text for custom types, more steps are required.
+在本书中我们使用`fmt::Display`，因为标准库提供了这些类型的实现。若要打印自定义类型的文本，需要更多的步骤。
 
-Implementing the `fmt::Display` trait automagically implements the
-[`ToString`] trait which allows us to [convert] the type to [`String`][string].
+### 动手试一试
 
-### Activities
+ * 改正上面代码中的两个错误（见 改正），使得运行不会报错。
 
- * Fix the two issues in the above code (see FIXME) so that it runs without
-   error.
- * Add a `println!` macro that prints: `Pi is roughly 3.142` by controlling
-   the number of decimal places shown. For the purposes of this exercise,
-   use `let pi = 3.141592` as an estimate for Pi. (Hint: you may need to
-   check the [`std::fmt`][fmt] documentation for setting the number of
-   decimals to display)
+ * 添加一个 `println!` 宏来打印：`Pi is roughly 3.142`（Pi约等于3.142），通过控制有效数字得到显示的结果。为了达到练习目的，使用 `let pi = 3.141592` 作为 Pi 的近似值（提示：设置小数位的显示格式可以参考文档[`std::fmt`][fmt]）。
 
-### See also
+### 参见：
 
-[`std::fmt`][fmt], [`macros`][macros], [`struct`][structs],
-and [`traits`][traits]
+[`std::fmt`][fmt], [`macros`][macros], [`struct`][structs]
+和 [`traits`][traits]
 
-[fmt]: https://doc.rust-lang.org/std/fmt/
-[macros]: macros.html
-[string]: std/str.html
-[structs]: custom_types/structs.html
-[traits]: trait.html
-[`ToString`]: https://doc.rust-lang.org/std/string/trait.ToString.html
-[convert]: conversion/string.html
+[fmt]: http://doc.rust-lang.org/std/fmt/
+[macros]: ./macros.html
+[string]: ./std/str.html
+[structs]: ./custom_types/structs.html
+[traits]: ./trait.html

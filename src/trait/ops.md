@@ -1,12 +1,8 @@
-# Operator Overloading
+# 运算符重载
 
-In Rust, many of the operators can be overloaded via traits. That is, some operators can
-be used to accomplish different tasks based on their input arguments. This is possible
-because operators are syntactic sugar for method calls. For example, the `+` operator in
-`a + b` calls the `add` method (as in `a.add(b)`). This `add` method is part of the `Add`
-trait. Hence, the `+` operator can be used by any implementor of the `Add` trait.
+在 Rust 中，大部分运算符都可以通过 trait 来重载。也就是说，这些运算符可以根据它们输入的参数来完成不同的任务。为什么这样做是可行的呢，是因为运算符是对方法调用的语法糖。例如，`a + b` 中的 `+` 运算符会调用 `add` 方法（也就是 `a.add(b)`）。这个 `add` 方法是 `Add` trait 的一部分。因此，`+` 运算符可以被 `Add` trait 的实现者（implementor）使用。
 
-A list of the traits, such as `Add`, that overload operators can be found in [`core::ops`][ops].
+[点击这里][ops]查看列举的重载运算符 trait，比如 `Add`。（原文：A list of the traits, such as `Add`, that overload operators are available [here][ops].）
 
 ```rust,editable
 use std::ops;
@@ -20,9 +16,9 @@ struct FooBar;
 #[derive(Debug)]
 struct BarFoo;
 
-// The `std::ops::Add` trait is used to specify the functionality of `+`.
-// Here, we make `Add<Bar>` - the trait for addition with a RHS of type `Bar`.
-// The following block implements the operation: Foo + Bar = FooBar
+// `std::ops::Add` trait 在这里用来指明 `+` 的功能，我们给出 `Add<Bar>`——关于
+// 加法的 trait，带有一个 `Bar` 类型的右操作数（RHS）。下面代码块实现了这样的
+// 运算： Foo + Bar = FooBar。
 impl ops::Add<Bar> for Foo {
     type Output = FooBar;
 
@@ -33,9 +29,9 @@ impl ops::Add<Bar> for Foo {
     }
 }
 
-// By reversing the types, we end up implementing non-commutative addition.
-// Here, we make `Add<Foo>` - the trait for addition with a RHS of type `Foo`.
-// This block implements the operation: Bar + Foo = BarFoo
+// 通过反转类型，我们以实现非交换的加法作为结束。
+// 这里我们给出 `Add<Foo>`——关于加法的 trait，带有一个 `Foo` 类型的右操作数。
+// 这个代码块实现了这样的操作：Bar + Foo = BarFoo。
 impl ops::Add<Foo> for Bar {
     type Output = BarFoo;
 
@@ -52,10 +48,10 @@ fn main() {
 }
 ```
 
-### See Also
+###参见：
 
-[Add][add], [Syntax Index][syntax]
+[Add][add], [语法索引][syntax]
 
-[add]: https://doc.rust-lang.org/core/ops/trait.Add.html
-[ops]: https://doc.rust-lang.org/core/ops/
-[syntax]:https://doc.rust-lang.org/book/appendix-02-operators.html
+[add]: http://doc.rust-lang.org/core/ops/trait.Add.html
+[ops]: http://doc.rust-lang.org/core/ops/
+[syntax]: https://doc.rust-lang.org/book/syntax-index.html

@@ -1,63 +1,44 @@
-# Primitives
+# 原生类型
 
-Rust provides access to a wide variety of `primitives`. A sample includes:
+Rust 提供了多种原生类型，包括：
 
+* 有符号整型（signed integers）：`i8`， `i16`， `i32`， `i64` 和 `isize`（指针 size）
+* 无符号整型（unsigned integers）： `u8`， `u16`， `u64` 和 `usize`（指针 size）
+* 浮点类型（floating point）： `f32`， `f64`
+* `char`（字符）：单独的 Unicode 字符，如 `'a'`，`'α'` 和 `'∞'`（大小都是4个字节）
+* `bool`（布尔型）：只能是 `true` 或 `false`
+* 单元类型(unit type，空元组)： 只有 `()` 这个唯一值
+* 数组：如 `[1, 2, 3]`
+* 元组： 如 `(1, true)`
 
-### Scalar Types
-
-* signed integers: `i8`, `i16`, `i32`, `i64`, `i128` and `isize` (pointer size)
-* unsigned integers: `u8`, `u16`, `u32`, `u64`, `u128` and `usize` (pointer
-  size)
-* floating point: `f32`, `f64`
-* `char` Unicode scalar values like `'a'`, `'α'` and `'∞'` (4 bytes each)
-* `bool` either `true` or `false`
-* and the unit type `()`, whose only possible value is an empty tuple: `()`
-
-Despite the value of a unit type being a tuple, it is not considered a
-compound type because it does not contain multiple values. 
-
-### Compound Types
-
-* arrays like `[1, 2, 3]`
-* tuples like `(1, true)`
-
-Variables can always be *type annotated*. Numbers may additionally be
-annotated via a *suffix* or *by default*. Integers default to `i32` and
-floats to `f64`. Note that Rust can also infer types from context.
+变量都能够显式地给出**类型声明**。数字可以通过**加后缀**或**默认方式**来额外地声明。整型默认为
+`i32` 类型，浮点型默认为 `f64` 类型（译注：此说法不明确，[Rust语言参考][reference]指出：
+未声明类型数值的具体类型由实际使用情况推断，比如一个未声明类型整数和 `i64` 的整数相加，则该
+整数会自动推断为 `i64` 类型，仅当使用环境无法推断时，整型数值时才断定为 `i32`，浮点数值才
+断定为 `f64`）。
 
 ```rust,editable,ignore,mdbook-runnable
 fn main() {
-    // Variables can be type annotated.
+    // 变量可以声明类型。
     let logical: bool = true;
 
-    let a_float: f64 = 1.0;  // Regular annotation
-    let an_integer   = 5i32; // Suffix annotation
+    let a_float: f64 = 1.0;  // 常规声明
+    let an_integer   = 5i32; // 后缀声明
 
-    // Or a default will be used.
+    // 否则自动推断类型。
     let default_float   = 3.0; // `f64`
     let default_integer = 7;   // `i32`
-    
-    // A type can also be inferred from context 
-    let mut inferred_type = 12; // Type i64 is inferred from another line
-    inferred_type = 4294967296i64;
-    
-    // A mutable variable's value can be changed.
-    let mut mutable = 12; // Mutable `i32`
-    mutable = 21;
-    
-    // Error! The type of a variable can't be changed.
+
+    let mut mutable = 12; // 可变类型 `i32`。
+
+    // 报错！变量的类型不可改变。
     mutable = true;
-    
-    // Variables can be overwritten with shadowing.
-    let mutable = true;
 }
 ```
 
-### See also:
+### 参见：
 
-[the `std` library][std], [`mut`][mut], [inference], and [shadowing]
+[`std` 库][std]
 
-[std]: https://doc.rust-lang.org/std/
-[mut]: variable_bindings/mut.html
-[inference]: types/inference.html
-[shadowing]: variable_bindings/scope.html
+[std]: http://doc.rust-lang.org/std/
+[reference]: http://doc.rust-lang.org/reference.html#number-literals

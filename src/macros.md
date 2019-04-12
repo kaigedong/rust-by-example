@@ -1,40 +1,21 @@
-# macro_rules!
+# 使用 `macro_rules!` 来创建宏
 
-Rust provides a powerful macro system that allows metaprogramming. As you've
-seen in previous chapters, macros look like functions, except that their name
-ends with a bang `!`, but instead of generating a function call, macros are
-expanded into source code that gets compiled with the rest of the program.
-However, unlike macros in C and other languages, Rust macros are expanded into
-abstract syntax trees, rather than string preprocessing, so you don't get
-unexpected precedence bugs.
+Rust 提供了一个强大的宏系统，可进行元编程（metaprogramming）。正如你已经看过了前面章节，宏看起来和函数很像，除了名称末尾连着一个感叹号 `!` ，但宏并不产生一个函数调用，而是展开成源码并结合程序的其余代码一起进行编译。
 
-Macros are created using the `macro_rules!` macro.
+宏是通过 `macro_rules!` 宏来创建的。
 
 ```rust,editable
-// This is a simple macro named `say_hello`.
+// 这是一个简单简单的宏，名为 `say_hello`。
 macro_rules! say_hello {
-    // `()` indicates that the macro takes no argument.
+    // `()` 表示此宏不接受任何参数。
     () => (
-        // The macro will expand into the contents of this block.
+        // 此宏将会展开成这个代码块里面的内容。
         println!("Hello!");
     )
 }
 
 fn main() {
-    // This call will expand into `println!("Hello");`
+    // 这个调用将会展开成 `println("Hello");`!
     say_hello!()
 }
 ```
-
-So why are macros useful?
-
-1. Don't repeat yourself. There are many cases where you may need similar
-   functionality in multiple places but with different types. Often, writing a
-   macro is a useful way to avoid repeating code. (More on this later)
-
-2. Domain-specific languages. Macros allow you to define special syntax for a
-   specific purpose. (More on this later)
-
-3. Variadic interfaces. Sometime you want to define an interface that takes a
-   variable number of arguments. An example is `println!` which could take any
-   number of arguments, depending on the format string!. (More on this later)

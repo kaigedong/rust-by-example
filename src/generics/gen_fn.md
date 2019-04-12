@@ -1,59 +1,56 @@
-# Functions
+# 函数
 
-The same set of rules can be applied to functions: a type `T` becomes
-generic when preceded by `<T>`.
+同样的规则也可以适用于函数：在使用前给出 `<T>` 后，类型 `T` 就变成了泛型。
 
-Using generic functions sometimes requires explicitly specifying type 
-parameters. This may be the case if the function is called where the return type 
-is generic, or if the compiler doesn't have enough information to infer 
-the necessary type parameters.
+使用泛型函数有时需要显式地指明类型参量。这种可能的情况包括，调用返回类型是泛型的函数，或者编译器没有足够的信息来推导类型参量。
 
-A function call with explicitly specified type parameters looks like:
+函数调用使用显式指定的类型参量，如下所示：
 `fun::<A, B, ...>()`.
 
 ```rust,editable
-struct A;          // Concrete type `A`.
-struct S(A);       // Concrete type `S`.
-struct SGen<T>(T); // Generic type `SGen`.
+struct A;          // 具体类型 `A`。
+struct S(A);       // 具体类型 `S`。
+struct SGen<T>(T); // 泛型类型 `SGen`。
 
-// The following functions all take ownership of the variable passed into
-// them and immediately go out of scope, freeing the variable.
+// 下面全部函数都得到了变量的所有权，传递给函数的变量在离开作用域时立即释放。
+// （原文：The following functions all take ownership of the variable passed
+// into them and immediately go out of scope, freeing the variable.）
 
-// Define a function `reg_fn` that takes an argument `_s` of type `S`.
-// This has no `<T>` so this is not a generic function.
+// 定义一个函数 `reg_fn`，接受一个 `S` 类型的参数 `_s`。
+// 因为没有 `<T>`，所以这不是泛型函数。
 fn reg_fn(_s: S) {}
 
-// Define a function `gen_spec_t` that takes an argument `_s` of type `SGen<T>`.
-// It has been explicitly given the type parameter `A`, but because `A` has not 
-// been specified as a generic type parameter for `gen_spec_t`, it is not generic.
+// 定义一个函数 `gen_spec_t`，接受一个 `SGen<T>` 类型的参数 `_s`。
+// 这里显式地给出了类型参量 `A`，但因为 `A` 没有被指明为针对 `gen_spec_t` 的
+// 泛型类型参量，所以这不是一个泛型。
 fn gen_spec_t(_s: SGen<A>) {}
 
-// Define a function `gen_spec_i32` that takes an argument `_s` of type `SGen<i32>`.
-// It has been explicitly given the type parameter `i32`, which is a specific type.
-// Because `i32` is not a generic type, this function is also not generic.
+// 定义一个函数 `gen_spec_i32`，接受一个 `SGen<i32>` 类型的参数 `_s`。
+// 这里显式地给出了类型参量 `i32`，而 `i32` 是一个具体类型。
+// 由于 `i32` 不是一个泛型类型，所以这个函数也不是泛型。
 fn gen_spec_i32(_s: SGen<i32>) {}
 
-// Define a function `generic` that takes an argument `_s` of type `SGen<T>`.
-// Because `SGen<T>` is preceded by `<T>`, this function is generic over `T`.
+// 定义一个函数 `generic`，接受一个 `SGen<T>` 类型的参数 `_s`。
+// 因为 `SGen<T>` 之前给定了 `<T>`，所以这个函数是关于 `T` 的泛型。
 fn generic<T>(_s: SGen<T>) {}
 
 fn main() {
-    // Using the non-generic functions
-    reg_fn(S(A));          // Concrete type.
-    gen_spec_t(SGen(A));   // Implicitly specified type parameter `A`.
-    gen_spec_i32(SGen(6)); // Implicitly specified type parameter `i32`.
+    // 使用非泛型函数
+    reg_fn(S(A));          // 具体类型。
+    gen_spec_t(SGen(A));   // 隐式地指定类型参量 `A`。
+    gen_spec_i32(SGen(6)); // 隐式地指定类型参量 `i32`。
 
-    // Explicitly specified type parameter `char` to `generic()`.
+    // 显式地指定类型参量 `char` 传给 `generic()`。
     generic::<char>(SGen('a'));
 
-    // Implicitly specified type parameter `char` to `generic()`.
+    // 隐式地指定类型参量 `char` 传给 `generic()`。
     generic(SGen('c'));
 }
 ```
 
-### See also:
+### 参见：
 
-[functions][fn] and [`struct`s][structs]
+[函数][fn] 和 [`struct`s][structs]
 
-[fn]: fn.html
-[structs]: custom_types/structs.html
+[fn]: ./fn.html
+[structs]: ./custom_types/structs.html

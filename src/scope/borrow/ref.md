@@ -1,8 +1,6 @@
-# The ref pattern
+# `ref` 模式
 
-When doing pattern matching or destructuring via the `let` binding, the `ref`
-keyword can be used to take references to the fields of a struct/tuple. The 
-example below shows a few instances where this can be useful:
+在通过 `let` 绑定来进行模式匹配或解构时，`ref` 关键字可用来接受结构体/元组的字段的引用。下面的例子展示了几个实例，可看到 `ref` 的作用：
 
 ```rust,editable
 #[derive(Clone, Copy)]
@@ -11,8 +9,7 @@ struct Point { x: i32, y: i32 }
 fn main() {
     let c = 'Q';
 
-    // A `ref` borrow on the left side of an assignment is equivalent to
-    // an `&` borrow on the right side.
+    // 赋值语句中左边的 `ref` 关键字等价右边的 `&` 符号。
     let ref ref_c1 = c;
     let ref_c2 = &c;
 
@@ -20,34 +17,34 @@ fn main() {
 
     let point = Point { x: 0, y: 0 };
 
-    // `ref` is also valid when destructuring a struct.
+    // 在解构一个结构体时 `ref` 同样有效。
     let _copy_of_x = {
-        // `ref_to_x` is a reference to the `x` field of `point`.
+        // `ref_to_x` 是一个指向 `point` 的 `x` 字段的引用。
         let Point { x: ref ref_to_x, y: _ } = point;
 
-        // Return a copy of the `x` field of `point`.
+        // 返回一个 `point` 的 `x` 字段的拷贝。
         *ref_to_x
     };
 
-    // A mutable copy of `point`
+    // `point` 的可变拷贝
     let mut mutable_point = point;
 
     {
-        // `ref` can be paired with `mut` to take mutable references.
+        // `ref` 可以结合 `mut` 来接受可变引用。
         let Point { x: _, y: ref mut mut_ref_to_y } = mutable_point;
 
-        // Mutate the `y` field of `mutable_point` via a mutable reference.
+        // 通过可变引用来改变 `mutable_point` 的字段 `y`。
         *mut_ref_to_y = 1;
     }
 
     println!("point is ({}, {})", point.x, point.y);
     println!("mutable_point is ({}, {})", mutable_point.x, mutable_point.y);
 
-    // A mutable tuple that includes a pointer
+    // 包含一个指针的可变元组
     let mut mutable_tuple = (Box::new(5u32), 3u32);
     
     {
-        // Destructure `mutable_tuple` to change the value of `last`.
+        // 解构 `mutable_tuple` 来改变 `last` 的值。
         let (_, ref mut last) = mutable_tuple;
         *last = 2u32;
     }
