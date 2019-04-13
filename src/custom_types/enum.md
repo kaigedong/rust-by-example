@@ -1,27 +1,26 @@
 # 枚举
 
-`enum` 关键字允许创建一个代表数个可能变量的数据的类型（原文：The `enum` keyword allows
- the creation of a type which may be one of a few different variants.若您对此句有
- 更好的翻译或理解，希望指出来，谢谢。）。在 `struct` 中任何合法的变量在 `enum` 同样是合法的。
+`enum` 关键字可以创建类型为一组变量之一的类型。在 `struct` 中任何合法的变量在 `enum` 同样是合法的。
 
 ```rust,editable
 // 隐藏未使用代码警告的属性。
 #![allow(dead_code)]
 
-// 创建一个 `enum` （枚举）来划分人的类别。注意命名和类型的信息是如何一起
-// 明确规定变量的：
-// `Engineer != Scientist` 和 `Height(i32) != Weight(i32)`。每者都不相同且
-// 相互独立。
-enum Person {
-    // 一个 `enum` 可能是个 `unit-like`（类单元结构体），
-    Engineer,
-    Scientist,
-    // 或像一个元组结构体，
-    Height(i32),
-    Weight(i32),
-    // 或像一个普通的结构体。
-    Info { name: String, height: i32 }
+// 创建一个 `enum` (枚举)类型来区分web 事件。注意，使用了名称和类型一起指定变量：
+// `PageLoad != PageUnload` and `KeyPress(char) != Paste(String)`.
+// 每者都不相同且相互独立。
+
+enum WebEvent {
+    // `enum` 类型可以是`unit-like`,
+    PageLoad,
+    PageUnload,
+    // tuple,
+    KeyPress(char),
+    Paste(String),
+    // 或者是结构体.
+    Click { x: i64, y: i64 },
 }
+
 
 // 此函数将一个 `Person` enum 作为参数，无返回值。
 fn inspect(p: Person) {

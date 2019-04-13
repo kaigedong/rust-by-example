@@ -7,6 +7,12 @@
 * 单元结构体，不带字段，在泛型中很有用。
 
 ```rust,editable
+#[derive(Debug)]
+struct Person<'a> {
+    name: &'a str,
+    age: u8,
+}
+
 // 单元结构体
 struct Nil;
 
@@ -27,12 +33,25 @@ struct Rectangle {
 }
 
 fn main() {
+    // 使用简写创建结构体
+    let name = "Peter";
+    let age = 27;
+    let peter = Person { name, age };
+
+    // 打印结构体
+    println!("{:?}", peter)
+
     // 实例化结构体 `Point`
     let point: Point = Point { x: 0.3, y: 0.4 };
 
     // 访问 point 的字段
     println!("point coordinates: ({}, {})", point.x, point.y);
 
+    // 使用结构体更新语法，使用之前的结构体创建新的结构体
+    let new_point = Point{ x: 0.1, ..point };
+    // `new_point` 的 `new_point.y` 将与 `point.y` 一样，因为我们用了`point`的一部分
+    println!("second point: ({}, {})", new_point.x, new_point.y);
+    
     // 使用 `let` 绑定来解构 point
     let Point { x: my_x, y: my_y } = point;
 

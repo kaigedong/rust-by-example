@@ -3,14 +3,13 @@
 我们可以看到格式化就是通过**格式字符串**得到特定格式：
 
 * `format!("{}", foo)` -> `"3735928559"`
-* `format!("0x{:X}", foo)` ->
-  [`"0xDEADBEEF"`][deadbeef]
+* `format!("0x{:X}", foo)` ->[`"0xDEADBEEF"`][deadbeef]
 * `format!("0o{:o}", foo)` -> `"0o33653337357"`
 
 根据使用的**参数类型**，同样的变量（`foo`）能够格式化成不同的形式：`X`， `o` 和**未指定形式**。
 
 这个格式化的功能是通过 trait 实现，并且是一种 trait 来实现各种参数类型。最常见的格式化 trait
-就是 `Display`，它可以处理多种情形，但没有指明参数类型，比如 `{}`。
+就是 `Display`，它可以处理不指明参数类型的情况，比如 `{}`。
 
 ```rust,editable
 use std::fmt::{self, Formatter, Display};
@@ -56,7 +55,7 @@ fn main() {
         Color { red: 0, green: 3, blue: 254 },
         Color { red: 0, green: 0, blue: 0 },
     ].iter() {
-        // 一旦添加了针对 fmt::Display 的实现，则要用 {} 对输出内容进行转换
+        // 当添加了 fmt::Display 的实现，则可以使用 {}
         println!("{:?}", *color)
     }
 }

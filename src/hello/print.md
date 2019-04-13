@@ -2,11 +2,13 @@
 
 打印操作由[`std::fmt`][fmt]里面所定义的一系列[`宏`][macros]来处理，其中包括：
 
-* `format!`：将格式化文本写到[`字符串`][string](String)。(译注: `字符串`是返回值不是参数。)
-* `print!`：与 `format!`类似，但将文本输出到控制台。
+* `format!`：将格式化文本写到[`字符串`][string](String)。
+* `print!`：与 `format!`类似，但将文本输出到控制台(`io::stdout`)。
 * `println!`: 与 `print!`类似，但输出结果追加一个换行符。
+* `eprint!`: 与`format!`类似，但将文本输入到标准错误(`io::stderr`)。
+* `eprintln!`: 与`eprint!`类似，输出结果追加一个换行符。
 
-所有的解析文本都以相同的方式进行。另外一点是格式化的正确性在编译时检查。
+所有的解析文本都以相同的方式进行。另外一点是将在编译时检查格式化的正确性。
 
 ```rust,editable,ignore,mdbook-runnable
 fn main() {

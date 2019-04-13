@@ -6,7 +6,8 @@
 
 slice（中文有“切片”之意） 类型和数组类似，但 slice 类型的大小在编译期间是不确定的。相反，
 slice 是一个双字对象（two-word object），第一个字是一个指向数据的指针，第二个字是切片的
-长度。slice 可以用来借用数组的一部分。slice 的类型标记为 `&[T]`。
+长度。word-size与`usize`类型大小相同，取决于计算机架构，如在`x86-64`架构上是`64`bit。 
+slice 可以用来借用数组的一部分。slice 的类型标记为 `&[T]`。
 
 ```rust,editable,ignore,mdbook-runnable
 use std::mem;

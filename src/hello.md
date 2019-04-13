@@ -12,7 +12,7 @@
 
 // 这是主函数
 fn main() {
-    // 调用已编译成的可执行文件时，在这里面的语句将会运行
+    // 调用已编译的可执行文件时，在这里面的语句将会执行
 
     // 将文本打印到控制台
     println!("Hello World!");
@@ -21,7 +21,7 @@ fn main() {
 
 `println!` 是一个 [**宏**][macros]（macros），可以将文本输出到控制台（console）。
 
-使用 Rust 的编译器 `rustc` 可以将源程序生成可执行文件：
+使用 Rust 的编译器 `rustc` 可以将源程序生成二进制的可执行文件：
 
 ```bash
 $ rustc hello.rs
@@ -44,3 +44,4 @@ I'm a Rustacean!
 ```
 
 [macros]: ./macros.html
+

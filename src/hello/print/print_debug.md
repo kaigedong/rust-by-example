@@ -43,7 +43,26 @@ fn main() {
 }
 ```
 
-所以 `fmt::Debug` 确实使这些内容可以打印，但是牺牲了美感。手动执行 `fmt::Display` 将能够弥补这些问题。
+所以 `fmt::Debug` 确实使这些内容可以打印，但是牺牲了美感。Rust也提供了`美观的打印`:`{:#？}.`
+
+```
+#[derive(Debug)]
+struct Person<'a> {
+    name: &'a str,
+    age: u8
+}
+
+fn main() {
+    let name = "Peter";
+    let age = 27;
+    let peter = Person { name, age };
+
+    // Pretty print
+    println!("{:#?}", peter);
+}
+```
+
+也可以手动实现 `fmt::Display` 来控制输出。
 
 ### 参见：
 

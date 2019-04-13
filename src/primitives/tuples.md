@@ -1,6 +1,6 @@
 # 元组
 
-元组是一个可以包含各种类型的组合。元组使用括号 `()` 来构成，每个元组的值都是 `(T1, T2, ...)`
+元组是一个可以包含各种类型的组合。可使用括号 `()` 来构造元组，每个元组的值都是 `(T1, T2, ...)`
 类型标记的形式，其中 `T1`,`T2` 是每个元素的类型。函数可以使用元组来返回多个值，因为元组可以
 拥有任意数量的值。
 
@@ -34,6 +34,11 @@ fn main() {
     // 元组可以打印
     println!("tuple of tuples: {:?}", tuple_of_tuples);
 
+    // 但是很长的元组不能打印
+    // let too_long_tuple = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13);
+    // println!("too long tuple: {:?}", too_long_tuple);
+    // TODO ^ Uncomment the above 2 lines to see the compiler error
+
     let pair = (1, true);
     println!("pair is {:?}", pair);
 
@@ -63,7 +68,8 @@ fn main() {
 ( 1.1 1.2 )
 ( 2.1 2.2 )
 ```
-    可以回顾之前学过的例子 [打印显示][print_display]。
+可以回顾之前学过的例子 [打印显示][print_display]。
+
  2. 以 `reverse` 函数作为样本，添加一个 `transpose` 函数，使它可以接受一个 Matrix 的参数，并
     返回一个两个元素元素交换后 Matrix。举个例子：
 ```
